@@ -1,0 +1,71 @@
+<div class="container">
+  <h2>Your Personalized Analysis</h2>
+  <p class="subtitle">Compare costs and see which option works best for you</p>
+
+  <div class="comparison-cards">
+    <div class="card buy-card">
+      <h3>Buy from Competition</h3>
+      <div class="total-price">€{{ buyTotal | number }}</div>
+      <div class="price-details">
+        <div>Competition quote: €{{ competitionPrice | number }}</div>
+        <div>Hardware: +€{{ (buyTotal - competitionPrice) | number }}</div>
+      </div>
+      <div class="disclaimer">One-time payment</div>
+    </div>
+
+    <div class="card rent-card">
+      <h3>Rent from Kassaku</h3> 
+      <div class="total-price">€{{ rentTotal | number }}</div>
+      <div class="price-details">
+        <div>Down payment: €300 + hardware</div>
+        <div>Monthly: €38 × {{ usageMonths }} months</div>
+      </div>
+      <div class="disclaimer">Spread over {{ usageMonths }} months</div>
+    </div>
+  </div>
+
+  <div class="recommendation" *ngIf="rentTotal !== buyTotal">
+    <div class="recommendation-badge" [class.rent]="rentTotal < buyTotal" [class.buy]="buyTotal < rentTotal">
+      <span class="recommendation-text">
+        💡 <strong>{{ getRecommendation() }}</strong> saves you 
+        €{{ getSavings() | number }} over {{ usageMonths }} months
+      </span>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Break-even Analysis</h3>
+    <canvas id="breakEvenChart"></canvas>
+    <div class="break-even-info" *ngIf="breakEvenMonth > 0">
+      <strong>Break-even point:</strong> After {{ breakEvenMonth }} months, 
+      buying becomes cheaper than renting
+    </div>
+  </div>
+
+  <div class="advantages">
+    <h3>Why rent from Kassaku?</h3>
+    <ul class="advantages-list">
+      <li *ngFor="let advantage of advantages">
+        ✅ {{ advantage }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="action-buttons">
+    <button class="btn-submit" (click)="onSubmit()">
+      📧 Get Full Quote by Email
+    </button>
+    <button class="btn-download" (click)="onSubmit()">
+      📄 Download as PDF
+    </button>
+  </div>
+
+  <div class="navigation-buttons">
+    <button class="btn-back" (click)="onBack()">
+      ← Back
+    </button>
+    <button class="btn-restart" (click)="onRestart()">
+      Start Over
+    </button>
+  </div>
+</div>

@@ -2,8 +2,8 @@
   <header>
     <h1>{{ title }}</h1>
     <p>Compare renting vs buying - Find your perfect POS solution</p>
-    <div class="step-indicator" *ngIf="step <= 4">
-      Step {{ step }} of 4
+    <div class="step-indicator" *ngIf="step <= 5">
+      Step {{ step }} of 5
     </div>
   </header>
   
@@ -45,5 +45,16 @@
       (next)="onNext()"
       (back)="onBack()"
     ></app-duration-email>
+
+    <!-- Step 5: Results -->
+    <app-results 
+      *ngIf="step === 5"
+      [businessType]="getBusinessTypeName()"
+      [competitionPrice]="competitionPrice"
+      [hardwareConfig]="hardwareConfig"
+      [usageMonths]="durationEmailConfig.usageMonths"
+      (back)="onBack()"
+      (restart)="onRestart()"
+    ></app-results>
   </main>
 </div>

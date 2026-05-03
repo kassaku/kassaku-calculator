@@ -4,12 +4,20 @@ import { BusinessTypeSelectionComponent } from './components/business-type-selec
 import { CompetitionPriceComponent } from './components/competition-price/competition-price.component';
 import { HardwareConfigComponent } from './components/hardware-config/hardware-config.component';
 import { DurationEmailComponent } from './components/duration-email/duration-email.component';
+import { ResultsComponent } from './components/results/results.component';
 import { BusinessType, PcType, ExtrasConfig } from './models/calculator.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, BusinessTypeSelectionComponent, CompetitionPriceComponent, HardwareConfigComponent, DurationEmailComponent],
+  imports: [
+    CommonModule, 
+    BusinessTypeSelectionComponent, 
+    CompetitionPriceComponent, 
+    HardwareConfigComponent, 
+    DurationEmailComponent,
+    ResultsComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -93,7 +101,28 @@ export class AppComponent {
     this.previousStep();
   }
 
-  // Helper for summary display
+  onRestart() {
+    this.step = 1;
+    this.selectedBusinessType = null;
+    this.competitionPrice = 3000;
+    this.hardwareConfig = {
+      pcType: 'PROFESSIONAL',
+      displayChoice: 'widescreen',
+      processorChoice: 'i5',
+      extras: {
+        secondPrinter: 0,
+        moneyDrawer: 0,
+        customerDisplay: 0,
+        digitalKeys: 3
+      }
+    };
+    this.durationEmailConfig = {
+      usageMonths: 60,
+      email: '',
+      newsletterOptIn: true
+    };
+  }
+
   getBusinessTypeName(): string {
     const types: {[key: string]: string} = {
       'WOK': 'WOK',
