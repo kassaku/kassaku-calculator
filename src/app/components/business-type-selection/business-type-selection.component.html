@@ -1,56 +1,64 @@
-<div class="container">
-  <h2>{{ 'business.title' | translate }}</h2>
-  <p class="subtitle">{{ 'business.subtitle' | translate }}</p>
-  
-  <div class="cards-grid">
-    <div 
-      class="card"
-      [class.selected]="selectedType === 'WOK'"
-      (click)="selectBusinessType('WOK')"
-    >
-      <div class="icon">🍽️</div>
-      <h3>{{ 'business.wok' | translate }}</h3>
-      <p>{{ 'business.wokDesc' | translate }}</p>
+<div class="cards-grid">
+  <!-- WOK -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'WOK'"
+    (click)="selectBusinessType('WOK')"
+  >
+    <div class="icon">
+      <img src="/icons/icon_wok.svg" alt="WOK" class="business-icon">
     </div>
-
-    <div 
-      class="card"
-      [class.selected]="selectedType === 'RESTAURANT'"
-      (click)="selectBusinessType('RESTAURANT')"
-    >
-      <div class="icon">🍔</div>
-      <h3>{{ 'business.restaurant' | translate }}</h3>
-      <p>{{ 'business.restaurantDesc' | translate }}</p>
-    </div>
-
-    <div 
-      class="card"
-      [class.selected]="selectedType === 'TAKEAWAY'"
-      (click)="selectBusinessType('TAKEAWAY')"
-    >
-      <div class="icon">📦</div>
-      <h3>{{ 'business.takeaway' | translate }}</h3>
-      <p>{{ 'business.takeawayDesc' | translate }}</p>
-    </div>
-
-    <div 
-      class="card"
-      [class.selected]="selectedType === 'DELIVERY'"
-      (click)="selectBusinessType('DELIVERY')"
-    >
-      <div class="icon">🛵</div>
-      <h3>{{ 'business.delivery' | translate }}</h3>
-      <p>{{ 'business.deliveryDesc' | translate }}</p>
-    </div>
+    <h3>{{ 'business.wok' | translate }}</h3>
+    <p>{{ 'business.wokDesc' | translate }}</p>
   </div>
 
-  <div class="error" *ngIf="errorMessage">
-    {{ errorMessage | translate }}
+  <!-- Restaurant (sit-in) -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'RESTAURANT'"
+    (click)="selectBusinessType('RESTAURANT')"
+  >
+    <div class="icon">
+      <img src="/icons/sitin.svg" alt="Restaurant" class="business-icon">
+    </div>
+    <h3>{{ 'business.restaurant' | translate }}</h3>
+    <p>{{ 'business.restaurantDesc' | translate }}</p>
   </div>
 
-  <div class="actions">
-    <button class="btn-next" (click)="onNext()" [disabled]="!selectedType">
-      {{ 'buttons.next' | translate }}
-    </button>
+  <!-- Takeaway (bag) -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'TAKEAWAY'"
+    (click)="selectBusinessType('TAKEAWAY')"
+  >
+    <div class="icon">
+      <img src="/icons/bag.svg" alt="Takeaway" class="business-icon">
+    </div>
+    <h3>{{ 'business.takeaway' | translate }}</h3>
+    <p>{{ 'business.takeawayDesc' | translate }}</p>
   </div>
+
+  <!-- Delivery -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'DELIVERY'"
+    (click)="selectBusinessType('DELIVERY')"
+  >
+    <div class="icon">
+      <img src="/icons/delivery.svg" alt="Delivery" class="business-icon">
+    </div>
+    <h3>{{ 'business.delivery' | translate }}</h3>
+    <p>{{ 'business.deliveryDesc' | translate }}</p>
+  </div>
+</div>
+
+<!-- Move error and button outside cards-grid -->
+<div class="error" *ngIf="errorMessage">
+  {{ errorMessage | translate }}
+</div>
+
+<div class="actions">
+  <button class="btn-next" (click)="onNext()" [disabled]="!selectedType">
+    {{ 'buttons.next' | translate }}
+  </button>
 </div>

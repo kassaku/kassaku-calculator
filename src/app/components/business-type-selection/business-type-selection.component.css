@@ -121,3 +121,23 @@ p {
   background: #ccc;
   cursor: not-allowed;
 }
+
+.business-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .business-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
