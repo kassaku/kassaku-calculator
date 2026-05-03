@@ -1,0 +1,78 @@
+<div class="container">
+  <h2>Hardware Configuration</h2>
+  <p class="subtitle">Customize your POS hardware setup</p>
+
+  <!-- PC Selection -->
+  <section class="section">
+    <h3>Choose Your PC Hardware</h3>
+    <div class="pc-options">
+      <div 
+        *ngFor="let pc of pcOptions"
+        class="pc-card"
+        [class.selected]="selectedPcType === pc.value"
+        (click)="selectedPcType = pc.value; onPcTypeChange()"
+      >
+        <div class="pc-icon">{{ pc.icon }}</div>
+        <h4>{{ pc.name }}</h4>
+        <div class="price" *ngIf="pc.price > 0">€{{ pc.price }}</div>
+        <div class="price free" *ngIf="pc.price === 0">Included</div>
+        <p class="specs">{{ pc.specs }}</p>
+        <div class="badge">Best for: {{ pc.bestFor }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screens Selection -->
+  <section class="section">
+    <h3>Screens & Displays</h3>
+    <div class="screens-grid">
+      <div 
+        *ngFor="let screen of screenOptions"
+        class="screen-card"
+        [class.selected]="isScreenSelected(screen.id)"
+        (click)="onScreenToggle(screen.id)"
+      >
+        <div class="screen-name">{{ screen.name }}</div>
+        <div class="screen-price">€{{ screen.price }}</div>
+    <div class="screen-recommended" *ngIf="businessType && screen.recommendedFor?.includes(businessType)">
+    ⭐ Recommended
+    </div>
+  </div>
+    </div>
+  </section>
+
+  <!-- Extras Configuration -->
+  <section class="section">
+    <h3>Optional Extras</h3>
+    <div class="extras-list">
+      <div *ngFor="let item of extraItems" class="extra-item">
+        <div class="extra-info">
+          <div class="extra-name">{{ item.name }}</div>
+          <div class="extra-description">{{ item.description }}</div>
+          <div class="extra-price">€{{ item.price }} each</div>
+        </div>
+        <div class="extra-controls">
+          <button (click)="updateExtra(item.id, -1)" [disabled]="extras[item.id] === 0">-</button>
+          <span class="quantity">
+            {{ item.id === 'digitalKeys' ? getDigitalKeysDisplay() : extras[item.id] }}
+          </span>
+          <button (click)="updateExtra(item.id, 1)" [disabled]="extras[item.id] === item.maxQuantity">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Total Summary -->
+  <div class="total-summary">
+    <h3>Hardware Total: €{{ getTotalPrice() }}</h3>
+  </div>
+
+  <div class="navigation-buttons">
+    <button class="btn-back" (click)="onBack()">
+      ← Back
+    </button>
+    <button class="btn-next" (click)="onNext()">
+      Next Step →
+    </button>
+  </div>
+</div>

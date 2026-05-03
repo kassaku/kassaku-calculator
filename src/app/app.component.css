@@ -1,0 +1,33 @@
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+header {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 2rem;
+}
+
+p {
+  margin: 0.5rem 0 0;
+  color: #666;
+}
+
+main {
+  padding: 2rem;
+}
+
+.progress {
+  text-align: center;
+  margin-top: 2rem;
+  color: white;
+  font-size: 0.9rem;
+}

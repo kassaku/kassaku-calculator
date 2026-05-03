@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Competitor Quote</h2>
+  <p class="subtitle">What price did other POS providers quote you?</p>
+  
+  <div class="price-input-container">
+    <label class="input-label">
+      <span class="currency">€</span>
+      <input 
+        type="number" 
+        [(ngModel)]="competitionPrice"
+        (change)="onPriceChange(competitionPrice)"
+        min="0" 
+        max="10000" 
+        step="50"
+        class="price-input"
+        placeholder="0"
+      >
+    </label>
+    <p class="helper-text">Include hardware, software, and installation</p>
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="navigation-buttons">
+    <button class="btn-back" (click)="onBack()">
+      ← Back
+    </button>
+    <button class="btn-next" (click)="onNext()">
+      Next Step →
+    </button>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="container">
+  <h2>What type of business do you run?</h2>
+  <p class="subtitle">Select your business type to get personalized recommendations</p>
+  
+  <div class="cards-grid">
+    <div 
+      *ngFor="let type of businessTypes"
+      class="card"
+      [class.selected]="isSelected(type.value)"
+      (click)="selectBusinessType(type.value)"
+    >
+      <div class="icon">{{ type.icon }}</div>
+      <h3>{{ type.label }}</h3>
+      <p>{{ type.description }}</p>
+      <div class="badge">{{ type.defaultPrinters }} printers</div>
+      <div class="check" *ngIf="isSelected(type.value)">✓</div>
+    </div>
+  </div>
+
+  <div class="error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="actions">
+    <button 
+      class="btn-next" 
+      (click)="onNext()"
+      [disabled]="!selectedType"
+    >
+      Next Step →
+    </button>
+  </div>
+</div>

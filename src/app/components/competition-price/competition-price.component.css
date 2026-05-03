@@ -1,0 +1,120 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.price-input-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.input-label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 2rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  background: white;
+}
+
+.currency {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  color: #1a1a1a;
+}
+
+.price-input {
+  font-size: 2rem;
+  width: 250px;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+}
+
+.price-input:focus {
+  border-color: #4CAF50;
+}
+
+.helper-text {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  text-align: center;
+  color: #f44336;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  background: #ffebee;
+  border-radius: 8px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.btn-back, .btn-next {
+  padding: 12px 32px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-back {
+  background: #666;
+  color: white;
+}
+
+.btn-back:hover {
+  background: #555;
+  transform: translateX(-4px);
+}
+
+.btn-next {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-next:hover {
+  background: #45a049;
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .price-input {
+    font-size: 1.5rem;
+    width: 180px;
+  }
+  
+  .currency {
+    font-size: 1.5rem;
+  }
+}

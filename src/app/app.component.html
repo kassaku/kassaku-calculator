@@ -1,0 +1,37 @@
+<div class="app-container">
+  <header>
+    <h1>{{ title }}</h1>
+    <p>Compare renting vs buying - Find your perfect POS solution</p>
+  </header>
+  
+  <main>
+    <!-- Step 1: Business Type Selection -->
+    <app-business-type-selection 
+      *ngIf="step === 1"
+      (selectionChanged)="onBusinessTypeSelected($event)"
+      (next)="onNext()"
+    ></app-business-type-selection>
+
+    <!-- Step 2: Competition Price -->
+    <app-competition-price 
+      *ngIf="step === 2"
+      (priceChanged)="onCompetitionPriceChanged($event)"
+      (next)="onNext()"
+      (back)="onBack()"
+    ></app-competition-price>
+
+    <!-- Step 3: Hardware Configuration -->
+    <app-hardware-config 
+      *ngIf="step === 3"
+      [businessType]="selectedBusinessType"
+      (configChanged)="onHardwareConfigChanged($event)"
+      (next)="onNext()"
+      (back)="onBack()"
+    ></app-hardware-config>
+
+    <!-- Progress Indicator -->
+    <div class="progress" *ngIf="step <= 3">
+      Step {{ step }} of 4
+    </div>
+  </main>
+</div>
