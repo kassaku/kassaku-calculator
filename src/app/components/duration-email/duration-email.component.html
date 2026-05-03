@@ -1,0 +1,130 @@
+<div class="container">
+  <h2>Duration & Contact</h2>
+  <p class="subtitle">Tell us how long you'll use the system and where to send your quote</p>
+
+  <!-- Usage Duration -->
+  <section class="section">
+    <h3>How many months will you use this POS system?</h3>
+    
+    <div class="duration-controls">
+      <!-- Slider -->
+      <div class="slider-container">
+        <input 
+          type="range" 
+          [(ngModel)]="usageMonthsSlider"
+          (input)="onSliderChange(usageMonthsSlider)"
+          min="12" 
+          max="120" 
+          step="1"
+          class="duration-slider"
+        >
+        <div class="slider-ticks">
+          <span *ngFor="let tick of tickMarks" class="tick" [style.left.%]="((tick - 12) / 108) * 100">
+            {{ tick }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Number Input -->
+      <div class="months-input">
+        <label>Months:</label>
+        <input 
+          type="number" 
+          [(ngModel)]="usageMonths"
+          (change)="onMonthsInputChange(usageMonths)"
+          min="12" 
+          max="120" 
+          step="1"
+          class="months-number"
+        >
+        <span class="years-text">{{ getYearsText() }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Email Capture -->
+  <section class="section">
+    <h3>Your Quote & Analysis</h3>
+    <p class="hint">We'll send your personalized quote and break-even analysis to this email</p>
+
+    <div class="email-form">
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input 
+          type="email" 
+          id="email"
+          [(ngModel)]="email"
+          (input)="onEmailChange()"
+          placeholder="you@example.com"
+          class="email-input"
+          [class.error]="emailError"
+        >
+        <div class="error-message" *ngIf="emailError">{{ emailError }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmEmail">Confirm Email Address *</label>
+        <input 
+          type="email" 
+          id="confirmEmail"
+          [(ngModel)]="confirmEmail"
+          (input)="onConfirmEmailChange()"
+          placeholder="you@example.com"
+          class="email-input"
+          [class.error]="matchError"
+        >
+        <div class="error-message" *ngIf="matchError">{{ matchError }}</div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="newsletterOptIn"
+            (change)="onNewsletterChange()"
+          >
+          <span>Yes, I'd like to receive news, tips, and special offers (you can unsubscribe anytime)</span>
+        </label>
+      </div>
+
+      <div class="gdpr-notice">
+        <small>
+          We'll never share your email with third parties. By submitting, you agree to our 
+          <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+        </small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary Preview -->
+  <section class="section">
+    <h3>Your Configuration Summary</h3>
+    <div class="summary-card">
+      <div class="summary-row">
+        <span class="summary-label">Business Type:</span>
+        <span class="summary-value">{{ getBusinessTypeName() }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Competition Price:</span>
+        <span class="summary-value">€{{ competitionPrice | number }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Hardware:</span>
+        <span class="summary-value">{{ getHardwareSummary() }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Usage Duration:</span>
+        <span class="summary-value">{{ getYearsText() }}</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="navigation-buttons">
+    <button class="btn-back" (click)="onBack()">
+      ← Back
+    </button>
+    <button class="btn-next" (click)="onNext()" [disabled]="!isValid()">
+      Get My Analysis →
+    </button>
+  </div>
+</div>

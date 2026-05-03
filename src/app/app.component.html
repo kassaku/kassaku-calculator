@@ -2,10 +2,13 @@
   <header>
     <h1>{{ title }}</h1>
     <p>Compare renting vs buying - Find your perfect POS solution</p>
+    <div class="step-indicator" *ngIf="step <= 4">
+      Step {{ step }} of 4
+    </div>
   </header>
   
   <main>
-    <!-- Step 1: Business Type Selection -->
+    <!-- Step 1: Business Type -->
     <app-business-type-selection 
       *ngIf="step === 1"
       (selectionChanged)="onBusinessTypeSelected($event)"
@@ -29,9 +32,18 @@
       (back)="onBack()"
     ></app-hardware-config>
 
-    <!-- Progress Indicator -->
-    <div class="progress" *ngIf="step <= 3">
-      Step {{ step }} of 4
-    </div>
+    <!-- Step 4: Duration & Email -->
+    <app-duration-email 
+      *ngIf="step === 4"
+      [usageMonths]="durationEmailConfig.usageMonths"
+      [email]="durationEmailConfig.email"
+      [newsletterOptIn]="durationEmailConfig.newsletterOptIn"
+      [businessTypeName]="getBusinessTypeName()"
+      [competitionPrice]="competitionPrice"
+      [hardwareSummary]="getHardwareSummary()"
+      (configChanged)="onDurationEmailChanged($event)"
+      (next)="onNext()"
+      (back)="onBack()"
+    ></app-duration-email>
   </main>
 </div>
