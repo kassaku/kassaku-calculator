@@ -1,0 +1,19 @@
+{
+  "business": {
+    "title": "Wat voor type bedrijf heb je?",
+    "subtitle": "Selecteer je bedrijfstype voor persoonlijke aanbevelingen",
+    "wok": "WOK",
+    "wokDesc": "Fast casual, hoge tafelomzet",
+    "restaurant": "Restaurant",
+    "restaurantDesc": "Full service, meerdere gangen",
+    "takeaway": "Afhaal",
+    "takeawayDesc": "Alleen ophalen, geen dine-in",
+    "delivery": "Bezorging",
+    "deliveryDesc": "Geen fysieke locatie",
+    "error": "Selecteer een bedrijfstype om verder te gaan"
+  },
+  "buttons": {
+    "next": "Volgende →",
+    "back": "← Terug"
+  }
+}

@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BusinessType, BUSINESS_TYPES } from '../../models/calculator.model';
+import { TranslateModule } from '@ngx-translate/core';
+
+export type BusinessType = 'WOK' | 'RESTAURANT' | 'TAKEAWAY' | 'DELIVERY';
 
 @Component({
   selector: 'app-business-type-selection',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './business-type-selection.component.html',
   styleUrls: ['./business-type-selection.component.css']
 })
@@ -13,7 +15,6 @@ export class BusinessTypeSelectionComponent {
   @Output() selectionChanged = new EventEmitter<BusinessType>();
   @Output() next = new EventEmitter<void>();
   
-  businessTypes = BUSINESS_TYPES;
   selectedType: BusinessType | null = null;
   errorMessage = '';
 
@@ -23,13 +24,9 @@ export class BusinessTypeSelectionComponent {
     this.selectionChanged.emit(type);
   }
 
-  isSelected(type: BusinessType): boolean {
-    return this.selectedType === type;
-  }
-
   onNext(): void {
     if (!this.selectedType) {
-      this.errorMessage = 'Please select a business type to continue';
+      this.errorMessage = 'business.error';
       return;
     }
     this.next.emit();

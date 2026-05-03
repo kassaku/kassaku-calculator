@@ -1,0 +1,19 @@
+{
+  "business": {
+    "title": "What type of business do you run?",
+    "subtitle": "Select your business type for personalized recommendations",
+    "wok": "WOK",
+    "wokDesc": "Fast casual, high table turnover",
+    "restaurant": "Restaurant",
+    "restaurantDesc": "Full service, multiple courses",
+    "takeaway": "Takeaway",
+    "takeawayDesc": "Pickup only, no dine-in",
+    "delivery": "Delivery",
+    "deliveryDesc": "No physical location",
+    "error": "Please select a business type to continue"
+  },
+  "buttons": {
+    "next": "Next →",
+    "back": "← Back"
+  }
+}

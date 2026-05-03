@@ -6,6 +6,7 @@ import { HardwareConfigComponent } from './components/hardware-config/hardware-c
 import { DurationEmailComponent } from './components/duration-email/duration-email.component';
 import { ResultsComponent } from './components/results/results.component';
 import { BusinessType, PcType, ExtrasConfig } from './models/calculator.model';
+import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { BusinessType, PcType, ExtrasConfig } from './models/calculator.model';
     CompetitionPriceComponent, 
     HardwareConfigComponent, 
     DurationEmailComponent,
-    ResultsComponent
+    ResultsComponent,
+    LanguageSwitcherComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

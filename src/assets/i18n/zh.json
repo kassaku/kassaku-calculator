@@ -1,0 +1,19 @@
+{
+  "business": {
+    "title": "您经营什么类型的业务？",
+    "subtitle": "选择您的业务类型以获得个性化推荐",
+    "wok": "炒锅餐厅",
+    "wokDesc": "快餐休闲，高翻台率",
+    "restaurant": "餐厅",
+    "restaurantDesc": "全套服务，多道菜",
+    "takeaway": "外卖",
+    "takeawayDesc": "仅限自取，无堂食",
+    "delivery": "配送",
+    "deliveryDesc": "无实体店面",
+    "error": "请选择业务类型以继续"
+  },
+  "buttons": {
+    "next": "下一步 →",
+    "back": "← 返回"
+  }
+}

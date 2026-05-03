@@ -1,33 +1,56 @@
 <div class="container">
-  <h2>What type of business do you run?</h2>
-  <p class="subtitle">Select your business type to get personalized recommendations</p>
+  <h2>{{ 'business.title' | translate }}</h2>
+  <p class="subtitle">{{ 'business.subtitle' | translate }}</p>
   
   <div class="cards-grid">
     <div 
-      *ngFor="let type of businessTypes"
       class="card"
-      [class.selected]="isSelected(type.value)"
-      (click)="selectBusinessType(type.value)"
+      [class.selected]="selectedType === 'WOK'"
+      (click)="selectBusinessType('WOK')"
     >
-      <div class="icon">{{ type.icon }}</div>
-      <h3>{{ type.label }}</h3>
-      <p>{{ type.description }}</p>
-      <div class="badge">{{ type.defaultPrinters }} printers</div>
-      <div class="check" *ngIf="isSelected(type.value)">✓</div>
+      <div class="icon">🍽️</div>
+      <h3>{{ 'business.wok' | translate }}</h3>
+      <p>{{ 'business.wokDesc' | translate }}</p>
+    </div>
+
+    <div 
+      class="card"
+      [class.selected]="selectedType === 'RESTAURANT'"
+      (click)="selectBusinessType('RESTAURANT')"
+    >
+      <div class="icon">🍔</div>
+      <h3>{{ 'business.restaurant' | translate }}</h3>
+      <p>{{ 'business.restaurantDesc' | translate }}</p>
+    </div>
+
+    <div 
+      class="card"
+      [class.selected]="selectedType === 'TAKEAWAY'"
+      (click)="selectBusinessType('TAKEAWAY')"
+    >
+      <div class="icon">📦</div>
+      <h3>{{ 'business.takeaway' | translate }}</h3>
+      <p>{{ 'business.takeawayDesc' | translate }}</p>
+    </div>
+
+    <div 
+      class="card"
+      [class.selected]="selectedType === 'DELIVERY'"
+      (click)="selectBusinessType('DELIVERY')"
+    >
+      <div class="icon">🛵</div>
+      <h3>{{ 'business.delivery' | translate }}</h3>
+      <p>{{ 'business.deliveryDesc' | translate }}</p>
     </div>
   </div>
 
   <div class="error" *ngIf="errorMessage">
-    {{ errorMessage }}
+    {{ errorMessage | translate }}
   </div>
 
   <div class="actions">
-    <button 
-      class="btn-next" 
-      (click)="onNext()"
-      [disabled]="!selectedType"
-    >
-      Next Step →
+    <button class="btn-next" (click)="onNext()" [disabled]="!selectedType">
+      {{ 'buttons.next' | translate }}
     </button>
   </div>
 </div>
