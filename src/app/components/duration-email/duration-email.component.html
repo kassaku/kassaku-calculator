@@ -1,13 +1,11 @@
 <div class="container">
-  <h2>Duration & Contact</h2>
-  <p class="subtitle">Tell us how long you'll use the system and where to send your quote</p>
+  <h2>{{ 'duration.title' | translate }}</h2>
+  <p class="subtitle">{{ 'duration.subtitle' | translate }}</p>
 
-  <!-- Usage Duration -->
   <section class="section">
-    <h3>How many months will you use this POS system?</h3>
+    <h3>{{ 'duration.question' | translate }}</h3>
     
     <div class="duration-controls">
-      <!-- Slider -->
       <div class="slider-container">
         <input 
           type="range" 
@@ -25,9 +23,8 @@
         </div>
       </div>
 
-      <!-- Number Input -->
       <div class="months-input">
-        <label>Months:</label>
+        <label>{{ 'duration.months' | translate }}:</label>
         <input 
           type="number" 
           [(ngModel)]="usageMonths"
@@ -37,19 +34,18 @@
           step="1"
           class="months-number"
         >
-        <span class="years-text">{{ getYearsText() }}</span>
+        <span class="years-text">{{ usageMonths }} {{ 'duration.months' | translate }} = {{ usageMonths / 12 }} {{ 'duration.years' | translate }}</span>
       </div>
     </div>
   </section>
 
-  <!-- Email Capture -->
   <section class="section">
-    <h3>Your Quote & Analysis</h3>
-    <p class="hint">We'll send your personalized quote and break-even analysis to this email</p>
+    <h3>{{ 'duration.email' | translate }}</h3>
+    <p class="hint">{{ 'duration.subtitle' | translate }}</p>
 
     <div class="email-form">
       <div class="form-group">
-        <label for="email">Email Address *</label>
+        <label for="email">{{ 'duration.email' | translate }} *</label>
         <input 
           type="email" 
           id="email"
@@ -59,11 +55,11 @@
           class="email-input"
           [class.error]="emailError"
         >
-        <div class="error-message" *ngIf="emailError">{{ emailError }}</div>
+        <div class="error-message" *ngIf="emailError">{{ emailError | translate }}</div>
       </div>
 
       <div class="form-group">
-        <label for="confirmEmail">Confirm Email Address *</label>
+        <label for="confirmEmail">{{ 'duration.confirmEmail' | translate }} *</label>
         <input 
           type="email" 
           id="confirmEmail"
@@ -73,7 +69,7 @@
           class="email-input"
           [class.error]="matchError"
         >
-        <div class="error-message" *ngIf="matchError">{{ matchError }}</div>
+        <div class="error-message" *ngIf="matchError">{{ matchError | translate }}</div>
       </div>
 
       <div class="form-group checkbox-group">
@@ -83,48 +79,44 @@
             [(ngModel)]="newsletterOptIn"
             (change)="onNewsletterChange()"
           >
-          <span>Yes, I'd like to receive news, tips, and special offers (you can unsubscribe anytime)</span>
+          <span>{{ 'duration.newsletter' | translate }}</span>
         </label>
       </div>
 
       <div class="gdpr-notice">
-        <small>
-          We'll never share your email with third parties. By submitting, you agree to our 
-          <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
-        </small>
+        <small>{{ 'duration.gdpr' | translate }}</small>
       </div>
     </div>
   </section>
 
-  <!-- Summary Preview -->
   <section class="section">
-    <h3>Your Configuration Summary</h3>
+    <h3>{{ 'duration.summary' | translate }}</h3>
     <div class="summary-card">
       <div class="summary-row">
-        <span class="summary-label">Business Type:</span>
+        <span class="summary-label">{{ 'duration.businessType' | translate }}:</span>
         <span class="summary-value">{{ getBusinessTypeName() }}</span>
       </div>
       <div class="summary-row">
-        <span class="summary-label">Competition Price:</span>
+        <span class="summary-label">{{ 'duration.competitionPrice' | translate }}:</span>
         <span class="summary-value">€{{ competitionPrice | number }}</span>
       </div>
       <div class="summary-row">
-        <span class="summary-label">Hardware:</span>
+        <span class="summary-label">{{ 'duration.hardware' | translate }}:</span>
         <span class="summary-value">{{ getHardwareSummary() }}</span>
       </div>
       <div class="summary-row">
-        <span class="summary-label">Usage Duration:</span>
-        <span class="summary-value">{{ getYearsText() }}</span>
+        <span class="summary-label">{{ 'duration.question' | translate }}:</span>
+        <span class="summary-value">{{ usageMonths }} {{ 'duration.months' | translate }}</span>
       </div>
     </div>
   </section>
 
   <div class="navigation-buttons">
     <button class="btn-back" (click)="onBack()">
-      ← Back
+      ← {{ 'buttons.back' | translate }}
     </button>
     <button class="btn-next" (click)="onNext()" [disabled]="!isValid()">
-      Get My Analysis →
+      {{ 'buttons.next' | translate }}
     </button>
   </div>
 </div>

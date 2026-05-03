@@ -1,6 +1,6 @@
 <div class="container">
-  <h2>Competitor Quote</h2>
-  <p class="subtitle">What price did other POS providers quote you?</p>
+  <h2>{{ 'competition.title' | translate }}</h2>
+  <p class="subtitle">{{ 'competition.subtitle' | translate }}</p>
   
   <div class="price-input-container">
     <label class="input-label">
@@ -16,19 +16,19 @@
         placeholder="0"
       >
     </label>
-    <p class="helper-text">Include hardware, software, and installation</p>
+    <p class="helper-text">{{ 'competition.helper' | translate }}</p>
   </div>
 
   <div class="error-message" *ngIf="errorMessage">
-    {{ errorMessage }}
+    {{ errorMessage | translate }}
   </div>
 
   <div class="navigation-buttons">
     <button class="btn-back" (click)="onBack()">
-      ← Back
+      ← {{ 'buttons.back' | translate }}
     </button>
     <button class="btn-next" (click)="onNext()">
-      Next Step →
+      {{ 'buttons.next' | translate }}
     </button>
   </div>
 </div>

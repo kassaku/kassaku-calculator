@@ -10,11 +10,12 @@ import {
   ExtrasConfig, 
   BusinessType 
 } from '../../models/calculator.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-hardware-config',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './hardware-config.component.html',
   styleUrls: ['./hardware-config.component.css']
 })

@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-competition-price',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './competition-price.component.html',
   styleUrls: ['./competition-price.component.css']
 })
@@ -31,11 +32,11 @@ export class CompetitionPriceComponent {
 
   onNext(): void {
     if (this.competitionPrice < 0) {
-      this.errorMessage = 'Price cannot be negative';
+      this.errorMessage = 'competition.errorMin';
       return;
     }
     if (this.competitionPrice > 10000) {
-      this.errorMessage = 'Price cannot exceed €10,000';
+      this.errorMessage = 'competition.errorMax';
       return;
     }
     this.next.emit();

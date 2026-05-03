@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 
 // Register Chart.js components
@@ -8,7 +9,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-results',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css']
 })
@@ -26,11 +27,12 @@ export class ResultsComponent implements OnInit {
   monthlySavings: number = 0;
   chart: Chart | undefined;
   
-  // Rental constants
   private readonly RENTAL_BASE_DOWN = 300;
   private readonly RENTAL_BASE_MONTHLY = 38;
   
   advantages: string[] = [];
+
+  constructor(private translate: TranslateService) {}
 
   ngOnInit() {
     this.calculateTotals();
@@ -95,7 +97,6 @@ export class ResultsComponent implements OnInit {
     const downPayment = this.RENTAL_BASE_DOWN + pcDown;
     const monthlyCost = this.RENTAL_BASE_MONTHLY;
     
-    // Fix: Compare number with number
     if (monthlyCost <= 0) {
       this.breakEvenMonth = 0;
       return;
@@ -106,50 +107,56 @@ export class ResultsComponent implements OnInit {
     this.monthlySavings = monthlyCost;
   }
 
-  generateAdvantages() {
+  generateAdvantages() 
+  {
+    const savingsAmount = (this.buyTotal - this.RENTAL_BASE_DOWN).toLocaleString();
     this.advantages = [
-      `Lower upfront cost: Save €${(this.buyTotal - this.RENTAL_BASE_DOWN).toLocaleString()} initially`,
-      `Free maintenance & support (€500/year value)`,
-      `Automatic software updates included`,
-      `Tax deductible - consult your accountant`
+      'results.lowerUpfront',
+      'results.freeMaintenance',
+      'results.autoUpdates',
+      'results.taxDeductible'
     ];
     
-    if (this.hardwareConfig.pcType === 'BYO') {
-      this.advantages.push(`Use your existing hardware investment - save €${this.calculateHardwarePrice().toLocaleString()}`);
+    if (this.hardwareConfig.pcType === 'BYO') 
+    {
+      this.advantages.push('results.existingHardware');
     }
     
     if (this.hardwareConfig.extras.secondPrinter > 0 || 
         this.hardwareConfig.extras.moneyDrawer > 0 || 
-        this.hardwareConfig.extras.customerDisplay > 0) {
-      this.advantages.push(`All peripherals covered under warranty`);
+        this.hardwareConfig.extras.customerDisplay > 0) 
+    {
+      this.advantages.push('results.warranty');
     }
     
-    if (this.businessType === 'WOK' || this.businessType === 'RESTAURANT') {
-      this.advantages.push(`Kitchen display system ready for high-volume orders`);
+    if (this.businessType === 'WOK' || this.businessType === 'RESTAURANT')
+    {
+      this.advantages.push('results.kitchenDisplay');
     }
     
-    if (this.businessType === 'DELIVERY') {
-      this.advantages.push(`Delivery routing integration ready for multi-platform orders`);
+    if (this.businessType === 'DELIVERY') 
+    {
+      this.advantages.push('results.deliveryRouting');
     }
     
-    if (this.usageMonths < 71) {
-      const savings = (this.buyTotal - this.rentTotal).toLocaleString();
-      this.advantages.push(`You'll save €${savings} by renting for ${this.usageMonths} months`);
+    if (this.usageMonths < 71) 
+    {
+      this.advantages.push('results.savings');
     }
     
-    if (this.breakEvenMonth > 0 && this.breakEvenMonth < this.usageMonths) {
-      this.advantages.push(`Note: After ${this.breakEvenMonth} months, buying becomes cheaper than renting`);
+    if (this.breakEvenMonth > 0 && this.breakEvenMonth < this.usageMonths) 
+    {
+      this.advantages.push('results.note');
     }
   }
-
-  createChart() {
+  createChart() 
+  {
     const canvas = document.getElementById('breakEvenChart') as HTMLCanvasElement;
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    // Calculate data points
     const maxMonths = Math.max(this.usageMonths + 24, this.breakEvenMonth + 12);
     const months = Array.from({length: maxMonths + 1}, (_, i) => i);
     
@@ -161,25 +168,28 @@ export class ResultsComponent implements OnInit {
       return downPayment + (monthlyCost * month);
     });
     
+    const buyLabel = this.translate.instant('results.buy');
+    const rentLabel = this.translate.instant('results.rent');
+    const monthsLabel = this.translate.instant('duration.months');
+    const costLabel = this.translate.instant('results.cost');
+    
     const config: ChartConfiguration = {
       type: 'line',
       data: {
         labels: months,
         datasets: [
           {
-            label: 'Buy Total (Competition)',
+            label: buyLabel,
             data: buyData,
             borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.1)',
             borderWidth: 3,
             tension: 0.1,
             fill: false
           },
           {
-            label: 'Rent from Kassaku',
+            label: rentLabel,
             data: rentData,
             borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.1)',
             borderWidth: 3,
             tension: 0.1,
             fill: false
@@ -192,70 +202,74 @@ export class ResultsComponent implements OnInit {
         plugins: {
           tooltip: {
             callbacks: {
-              label: (context) => {
-                return `${context.dataset.label}: €${context.raw?.toLocaleString()}`;
-              }
+              label: (context) => `${context.dataset.label}: €${context.raw?.toLocaleString()}`
             }
           },
-          legend: {
-            position: 'bottom'
-          }
+          legend: { position: 'bottom' }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Months',
-              font: { weight: 'bold' }
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Total Cost (€)',
-              font: { weight: 'bold' }
-            },
-            ticks: {
-              callback: (value) => `€${value.toLocaleString()}`
-            }
+          x: { title: { display: true, text: monthsLabel, font: { weight: 'bold' } } },
+          y: { 
+            title: { display: true, text: costLabel, font: { weight: 'bold' } },
+            ticks: { callback: (value) => `€${value.toLocaleString()}` }
           }
         }
       }
     };
     
-    // Destroy existing chart if it exists
-    if (this.chart) {
-      this.chart.destroy();
-    }
-    
+    if (this.chart) this.chart.destroy();
     this.chart = new Chart(ctx, config);
   }
 
-  getRecommendation(): string {
+  getRecommendation(): string 
+  {
     if (this.rentTotal < this.buyTotal) {
-      return 'Renting';
+      return 'results.rent';
     } else if (this.buyTotal < this.rentTotal) {
-      return 'Buying';
+      return 'results.buy';
     } else {
-      return 'Both options are equal';
+      return 'results.equal';
     }
   }
 
-  getSavings(): number {
+  getSavings(): number 
+  {
     return Math.abs(this.rentTotal - this.buyTotal);
   }
 
-  onSubmit() {
+  onSubmit() 
+  {
     console.log('Submitting quote...');
-    // We'll implement email sending next
     alert('Quote generation coming soon! We will email you the full analysis.');
   }
 
-  onBack() {
+  onBack() 
+  {
     this.back.emit();
   }
 
-  onRestart() {
+  onRestart() 
+  {
     this.restart.emit();
   }
-}
+
+  getAdvantageParams(advantage: string): any 
+  {
+    const savingsAmount = (this.buyTotal - this.RENTAL_BASE_DOWN).toLocaleString();
+    const existingHardwareSavings = this.calculateHardwarePrice().toLocaleString();
+    const rentSavings = (this.buyTotal - this.rentTotal).toLocaleString();
+    
+    switch(advantage) {
+      case 'results.lowerUpfront':
+        return { amount: savingsAmount };
+      case 'results.existingHardware':
+        return { amount: existingHardwareSavings };
+      case 'results.savings':
+        return { amount: rentSavings, months: this.usageMonths };
+      case 'results.note':
+        return { months: this.breakEvenMonth };
+      default:
+        return {};
+    }
+  }
+} 

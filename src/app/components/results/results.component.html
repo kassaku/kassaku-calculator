@@ -1,71 +1,71 @@
 <div class="container">
-  <h2>Your Personalized Analysis</h2>
-  <p class="subtitle">Compare costs and see which option works best for you</p>
+  <h2>{{ 'results.title' | translate }}</h2>
+  <p class="subtitle">{{ 'results.subtitle' | translate }}</p>
 
   <div class="comparison-cards">
     <div class="card buy-card">
-      <h3>Buy from Competition</h3>
+      <h3>{{ 'results.buy' | translate }}</h3>
       <div class="total-price">€{{ buyTotal | number }}</div>
       <div class="price-details">
-        <div>Competition quote: €{{ competitionPrice | number }}</div>
-        <div>Hardware: +€{{ (buyTotal - competitionPrice) | number }}</div>
+        <div>{{ 'competition.title' | translate }}: €{{ competitionPrice | number }}</div>
+        <div>{{ 'hardware.total' | translate }}: +€{{ (buyTotal - competitionPrice) | number }}</div>
       </div>
-      <div class="disclaimer">One-time payment</div>
+      <div class="disclaimer">{{ 'results.oneTime' | translate }}</div>
     </div>
 
     <div class="card rent-card">
-      <h3>Rent from Kassaku</h3> 
+      <h3>{{ 'results.rent' | translate }}</h3>
       <div class="total-price">€{{ rentTotal | number }}</div>
       <div class="price-details">
-        <div>Down payment: €300 + hardware</div>
-        <div>Monthly: €38 × {{ usageMonths }} months</div>
+        <div>{{ 'results.downPayment' | translate }}: €300 + {{ 'hardware.total' | translate | lowercase }}</div>
+        <div>{{ 'results.monthly' | translate }}: €38 × {{ usageMonths }} {{ 'duration.months' | translate }}</div>
       </div>
-      <div class="disclaimer">Spread over {{ usageMonths }} months</div>
+      <div class="disclaimer">{{ 'results.spread' | translate }} {{ usageMonths }} {{ 'duration.months' | translate }}</div>
     </div>
   </div>
 
   <div class="recommendation" *ngIf="rentTotal !== buyTotal">
     <div class="recommendation-badge" [class.rent]="rentTotal < buyTotal" [class.buy]="buyTotal < rentTotal">
       <span class="recommendation-text">
-        💡 <strong>{{ getRecommendation() }}</strong> saves you 
-        €{{ getSavings() | number }} over {{ usageMonths }} months
+        💡 <strong>{{ (getRecommendation() | translate) }}</strong> {{ 'results.saves' | translate }} 
+        €{{ getSavings() | number }} {{ 'results.over' | translate }} {{ usageMonths }} {{ 'duration.months' | translate }}
       </span>
     </div>
   </div>
 
   <div class="chart-container">
-    <h3>Break-even Analysis</h3>
+    <h3>{{ 'results.breakEven' | translate }}</h3>
     <canvas id="breakEvenChart"></canvas>
     <div class="break-even-info" *ngIf="breakEvenMonth > 0">
-      <strong>Break-even point:</strong> After {{ breakEvenMonth }} months, 
-      buying becomes cheaper than renting
+      <strong>{{ 'results.breakEvenPoint' | translate }}:</strong> {{ 'results.after' | translate }} {{ breakEvenMonth }} {{ 'results.months' | translate }}, 
+      {{ 'results.becomesCheaper' | translate }}
     </div>
   </div>
 
   <div class="advantages">
-    <h3>Why rent from Kassaku?</h3>
+    <h3>{{ 'results.whyRent' | translate }}</h3>
     <ul class="advantages-list">
-      <li *ngFor="let advantage of advantages">
-        ✅ {{ advantage }}
-      </li>
+    <li *ngFor="let advantage of advantages">
+      ✅ {{ advantage | translate: getAdvantageParams(advantage) }}
+    </li>
     </ul>
   </div>
 
   <div class="action-buttons">
     <button class="btn-submit" (click)="onSubmit()">
-      📧 Get Full Quote by Email
+      📧 {{ 'results.getQuote' | translate }}
     </button>
     <button class="btn-download" (click)="onSubmit()">
-      📄 Download as PDF
+      📄 {{ 'results.downloadPdf' | translate }}
     </button>
   </div>
 
   <div class="navigation-buttons">
     <button class="btn-back" (click)="onBack()">
-      ← Back
+      ← {{ 'buttons.back' | translate }}
     </button>
     <button class="btn-restart" (click)="onRestart()">
-      Start Over
+      {{ 'results.startOver' | translate }}
     </button>
   </div>
 </div>
