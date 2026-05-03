@@ -1,4 +1,4 @@
-// Type definitions (use 'type' for unions)
+// Type definitions
 export type BusinessType = 'WOK' | 'RESTAURANT' | 'TAKEAWAY' | 'DELIVERY';
 export type PcType = 'ECONOMY' | 'PROFESSIONAL' | 'BYO';
 
@@ -57,7 +57,7 @@ export const PC_OPTIONS: PcOption[] = [
   {
     value: 'ECONOMY',
     name: 'Economy',
-    price: 499,
+    price: 0,
     specs: 'Fanless Celeron J4125, 4GB RAM, 64GB SSD, Windows 11 Pro',
     bestFor: 'Takeaway, Food truck, Small cafe',
     icon: '🖥️'
@@ -65,7 +65,7 @@ export const PC_OPTIONS: PcOption[] = [
   {
     value: 'PROFESSIONAL',
     name: 'Professional',
-    price: 899,
+    price: 0,
     specs: 'Fanless Core i5, 8GB RAM, 128GB SSD, Windows 11 Pro',
     bestFor: 'Restaurant, Fast casual, Bakery',
     icon: '💼'
@@ -80,44 +80,39 @@ export const PC_OPTIONS: PcOption[] = [
   }
 ];
 
-// Screen Options
-export interface ScreenOption {
+// Display options for Economy tier
+export interface DisplayOption {
   id: string;
   name: string;
   price: number;
-  monthlyPrice: number;
-  recommendedFor?: BusinessType[];
+  aspectRatio: string;
 }
 
-export const SCREEN_OPTIONS: ScreenOption[] = [
-  { id: '10inch', name: '10" Customer Display', price: 199, monthlyPrice: 8, recommendedFor: ['TAKEAWAY'] },
-  { id: '15std', name: '15" Standard', price: 249, monthlyPrice: 10, recommendedFor: ['WOK', 'RESTAURANT'] },
-  { id: '15wide', name: '15" Widescreen', price: 299, monthlyPrice: 12 },
-  { id: '17large', name: '17" Large', price: 349, monthlyPrice: 14 }
+export const DISPLAY_OPTIONS: DisplayOption[] = [
+  { id: 'normal', name: 'Normal Display', price: 899, aspectRatio: '4:3' },
+  { id: 'widescreen', name: 'Widescreen Display', price: 999, aspectRatio: '16:9' }
+];
+
+// Professional tier processor options
+export interface ProcessorOption {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+}
+
+export const PROCESSOR_OPTIONS: ProcessorOption[] = [
+  { id: 'celeron', name: 'Celeron', price: 1500, description: 'Entry-level performance' },
+  { id: 'i5', name: 'Intel Core i5', price: 2200, description: 'High performance' }
 ];
 
 // Extras Configuration
 export interface ExtrasConfig {
-  secondPrinter: number;     // 0-2
-  moneyDrawer: number;       // 0-1
-  customerDisplay: number;   // 0-1
-  digitalKeys: number;       // 0-10
+  secondPrinter: number;
+  moneyDrawer: number;
+  customerDisplay: number;
+  digitalKeys: number;
 }
-
-export interface ExtraItem {
-  id: keyof ExtrasConfig;
-  name: string;
-  price: number;
-  maxQuantity: number;
-  description: string;
-}
-
-export const EXTRA_ITEMS: ExtraItem[] = [
-  { id: 'secondPrinter', name: 'Second Printer', price: 150, maxQuantity: 2, description: 'Extra printer for kitchen/bar' },
-  { id: 'moneyDrawer', name: 'Money Drawer', price: 120, maxQuantity: 1, description: 'Secure cash drawer' },
-  { id: 'customerDisplay', name: 'Customer Display', price: 180, maxQuantity: 1, description: 'Customer-facing screen' },
-  { id: 'digitalKeys', name: 'Digital License Keys', price: 25, maxQuantity: 10, description: 'First 3 keys are free' }
-];
 
 // Calculator Configuration
 export interface CalculatorConfig {
@@ -125,19 +120,9 @@ export interface CalculatorConfig {
   competitionPrice: number;
   usageMonths: number;
   pcType: PcType;
-  screens: string[];
+  displayChoice?: string;
+  processorChoice?: string;
   extras: ExtrasConfig;
   email: string;
   newsletterOptIn: boolean;
-}
-
-// Quote
-export interface Quote {
-  id: string;
-  timestamp: Date;
-  config: CalculatorConfig;
-  buyTotal: number;
-  rentTotal: number;
-  breakEvenMonth: number;
-  monthlySavings: number;
 }

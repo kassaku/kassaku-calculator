@@ -22,22 +22,54 @@
     </div>
   </section>
 
-  <!-- Screens Selection -->
-  <section class="section">
-    <h3>Screens & Displays</h3>
-    <div class="screens-grid">
+  <!-- Economy Display Options -->
+  <section class="section" *ngIf="isEconomy()">
+    <h3>Display Selection</h3>
+    <p class="hint">Choose your preferred display type</p>
+    <div class="display-options">
       <div 
-        *ngFor="let screen of screenOptions"
-        class="screen-card"
-        [class.selected]="isScreenSelected(screen.id)"
-        (click)="onScreenToggle(screen.id)"
+        *ngFor="let display of displayOptions"
+        class="display-card"
+        [class.selected]="selectedDisplay === display.id"
+        (click)="selectedDisplay = display.id; onDisplayChange()"
       >
-        <div class="screen-name">{{ screen.name }}</div>
-        <div class="screen-price">€{{ screen.price }}</div>
-    <div class="screen-recommended" *ngIf="businessType && screen.recommendedFor?.includes(businessType)">
-    ⭐ Recommended
+        <div class="display-name">{{ display.name }}</div>
+        <div class="display-aspect">{{ display.aspectRatio }}</div>
+        <div class="display-price">€{{ display.price }}</div>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Professional Processor Options -->
+  <section class="section" *ngIf="isProfessional()">
+    <h3>Processor Selection</h3>
+    <p class="hint">Choose your processor performance level</p>
+    <div class="processor-options">
+      <div 
+        *ngFor="let processor of processorOptions"
+        class="processor-card"
+        [class.selected]="selectedProcessor === processor.id"
+        (click)="selectedProcessor = processor.id; onProcessorChange()"
+      >
+        <div class="processor-name">{{ processor.name }}</div>
+        <div class="processor-desc">{{ processor.description }}</div>
+        <div class="processor-price">+€{{ processor.price }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BYO Info -->
+  <section class="section" *ngIf="isBYO()">
+    <div class="byo-info">
+      <h3>Bring Your Own PC</h3>
+      <p>You'll use your own hardware. Minimum requirements:</p>
+      <ul>
+        <li>Windows 10 Pro or newer</li>
+        <li>4GB RAM minimum (8GB recommended)</li>
+        <li>50GB free disk space</li>
+        <li>Stable internet connection</li>
+      </ul>
+      <p class="note">No hardware warranty from Kassaku. Software-only rental available.</p>
     </div>
   </section>
 
@@ -45,18 +77,55 @@
   <section class="section">
     <h3>Optional Extras</h3>
     <div class="extras-list">
-      <div *ngFor="let item of extraItems" class="extra-item">
+      <div class="extra-item">
         <div class="extra-info">
-          <div class="extra-name">{{ item.name }}</div>
-          <div class="extra-description">{{ item.description }}</div>
-          <div class="extra-price">€{{ item.price }} each</div>
+          <div class="extra-name">Second Printer</div>
+          <div class="extra-description">Extra printer for kitchen/bar</div>
+          <div class="extra-price">€150 each</div>
         </div>
         <div class="extra-controls">
-          <button (click)="updateExtra(item.id, -1)" [disabled]="extras[item.id] === 0">-</button>
-          <span class="quantity">
-            {{ item.id === 'digitalKeys' ? getDigitalKeysDisplay() : extras[item.id] }}
-          </span>
-          <button (click)="updateExtra(item.id, 1)" [disabled]="extras[item.id] === item.maxQuantity">+</button>
+          <button (click)="updateExtra('secondPrinter', -1)" [disabled]="extras.secondPrinter === 0">-</button>
+          <span class="quantity">{{ extras.secondPrinter }}</span>
+          <button (click)="updateExtra('secondPrinter', 1)" [disabled]="extras.secondPrinter === 2">+</button>
+        </div>
+      </div>
+
+      <div class="extra-item">
+        <div class="extra-info">
+          <div class="extra-name">Money Drawer</div>
+          <div class="extra-description">Secure cash drawer</div>
+          <div class="extra-price">€120 each</div>
+        </div>
+        <div class="extra-controls">
+          <button (click)="updateExtra('moneyDrawer', -1)" [disabled]="extras.moneyDrawer === 0">-</button>
+          <span class="quantity">{{ extras.moneyDrawer }}</span>
+          <button (click)="updateExtra('moneyDrawer', 1)" [disabled]="extras.moneyDrawer === 1">+</button>
+        </div>
+      </div>
+
+      <div class="extra-item">
+        <div class="extra-info">
+          <div class="extra-name">Customer Display</div>
+          <div class="extra-description">Customer-facing screen</div>
+          <div class="extra-price">€180 each</div>
+        </div>
+        <div class="extra-controls">
+          <button (click)="updateExtra('customerDisplay', -1)" [disabled]="extras.customerDisplay === 0">-</button>
+          <span class="quantity">{{ extras.customerDisplay }}</span>
+          <button (click)="updateExtra('customerDisplay', 1)" [disabled]="extras.customerDisplay === 1">+</button>
+        </div>
+      </div>
+
+      <div class="extra-item">
+        <div class="extra-info">
+          <div class="extra-name">Digital License Keys</div>
+          <div class="extra-description">First 3 keys are free</div>
+          <div class="extra-price">€25 each after 3</div>
+        </div>
+        <div class="extra-controls">
+          <button (click)="updateExtra('digitalKeys', -1)" [disabled]="extras.digitalKeys === 0">-</button>
+          <span class="quantity">{{ getDigitalKeysDisplay() }}</span>
+          <button (click)="updateExtra('digitalKeys', 1)" [disabled]="extras.digitalKeys === 10">+</button>
         </div>
       </div>
     </div>
@@ -65,6 +134,11 @@
   <!-- Total Summary -->
   <div class="total-summary">
     <h3>Hardware Total: €{{ getTotalPrice() }}</h3>
+    <div class="price-breakdown" *ngIf="!isBYO()">
+      <span *ngIf="isEconomy()">Base: €{{ getDisplayPrice() }}</span>
+      <span *ngIf="isProfessional()">Base: €{{ getProcessorPrice() }}</span>
+      <span *ngIf="getTotalExtrasPrice() > 0"> + Extras: €{{ getTotalExtrasPrice() }}</span>
+    </div>
   </div>
 
   <div class="navigation-buttons">

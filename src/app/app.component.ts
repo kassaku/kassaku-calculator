@@ -17,9 +17,16 @@ export class AppComponent {
   step: number = 1;
   selectedBusinessType: BusinessType | null = null;
   competitionPrice: number = 3000;
-  hardwareConfig: {pcType: PcType, screens: string[], extras: ExtrasConfig} = {
+  
+  hardwareConfig: {
+    pcType: PcType, 
+    displayChoice?: string,
+    processorChoice?: string,
+    extras: ExtrasConfig
+  } = {
     pcType: 'PROFESSIONAL',
-    screens: [],
+    displayChoice: 'widescreen',
+    processorChoice: 'i5',
     extras: {
       secondPrinter: 0,
       moneyDrawer: 0,
@@ -36,8 +43,14 @@ export class AppComponent {
     this.competitionPrice = price;
   }
 
-  onHardwareConfigChanged(config: {pcType: PcType, screens: string[], extras: ExtrasConfig}) {
+  onHardwareConfigChanged(config: {
+    pcType: PcType, 
+    displayChoice?: string,
+    processorChoice?: string,
+    extras: ExtrasConfig
+  }) {
     this.hardwareConfig = config;
+    console.log('Hardware config updated:', this.hardwareConfig);
   }
 
   nextStep() {
