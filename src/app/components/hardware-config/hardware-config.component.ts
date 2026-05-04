@@ -10,6 +10,7 @@ import {
   ExtrasConfig, 
   BusinessType 
 } from '../../models/calculator.model';
+import { PRICES } from '../../models/prices.model';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -22,6 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class HardwareConfigComponent implements OnInit {
   @Output() configChanged = new EventEmitter<{
     pcType: PcType, 
+    menuTranslation: string,
     displayChoice?: string,
     processorChoice?: string,
     extras: ExtrasConfig
@@ -33,7 +35,9 @@ export class HardwareConfigComponent implements OnInit {
   pcOptions = PC_OPTIONS;
   displayOptions = DISPLAY_OPTIONS;
   processorOptions = PROCESSOR_OPTIONS;
-  
+  public PRICES = PRICES;
+
+  selectedMenuTranslation: string = 'none';
   selectedPcType: PcType = 'PROFESSIONAL';
   selectedDisplay: string = 'widescreen';
   selectedProcessor: string = 'i5';
@@ -42,7 +46,7 @@ export class HardwareConfigComponent implements OnInit {
     secondPrinter: 0,
     moneyDrawer: 0,
     customerDisplay: 0,
-    digitalKeys: 3
+    digitalKeys: PRICES.digitalKeys.freeKeys
   };
 
   ngOnInit() {
@@ -50,7 +54,6 @@ export class HardwareConfigComponent implements OnInit {
   }
 
   onPcTypeChange(): void {
-    // Reset selections when PC type changes
     if (this.selectedPcType === 'ECONOMY') {
       this.selectedDisplay = 'normal';
     } else if (this.selectedPcType === 'PROFESSIONAL') {
@@ -63,6 +66,16 @@ export class HardwareConfigComponent implements OnInit {
     this.emitConfig();
   }
 
+  getBasePriceForType(pcType: PcType): number 
+  {
+    if (pcType === 'ECONOMY') {
+      return PRICES.economy.basePrice;
+    } else if (pcType === 'PROFESSIONAL') {
+      return this.selectedProcessor === 'celeron' ? PRICES.professional.celeron : PRICES.professional.i5;
+    }
+    return 0;
+  }
+
   onProcessorChange(): void {
     this.emitConfig();
   }
@@ -72,7 +85,7 @@ export class HardwareConfigComponent implements OnInit {
       secondPrinter: 2,
       moneyDrawer: 1,
       customerDisplay: 1,
-      digitalKeys: 10
+      digitalKeys: PRICES.digitalKeys.maxKeys
     };
     
     const currentQty = this.extras[itemId] as number;
@@ -86,15 +99,15 @@ export class HardwareConfigComponent implements OnInit {
 
   getExtraPrice(itemId: keyof ExtrasConfig): number {
     const prices = {
-      secondPrinter: 150,
-      moneyDrawer: 120,
-      customerDisplay: 180,
-      digitalKeys: 25
+      secondPrinter: PRICES.extras.secondPrinter,
+      moneyDrawer: PRICES.extras.moneyDrawer,
+      customerDisplay: PRICES.extras.customerDisplay,
+      digitalKeys: PRICES.extras.digitalKey
     };
     
     let quantity = this.extras[itemId] as number;
     if (itemId === 'digitalKeys') {
-      quantity = Math.max(0, quantity - 3); // First 3 free
+      quantity = Math.max(0, quantity - PRICES.digitalKeys.freeKeys);
     }
     return quantity * prices[itemId];
   }
@@ -107,15 +120,13 @@ export class HardwareConfigComponent implements OnInit {
 
   getBasePrice(): number {
     if (this.selectedPcType === 'ECONOMY') {
-      if (this.selectedDisplay === 'normal') return 899;
-      if (this.selectedDisplay === 'widescreen') return 999;
-      return 899;
+      return PRICES.economy.basePrice;
     } else if (this.selectedPcType === 'PROFESSIONAL') {
-      if (this.selectedProcessor === 'celeron') return 1500;
-      if (this.selectedProcessor === 'i5') return 2200;
-      return 1500;
+      if (this.selectedProcessor === 'celeron') return PRICES.professional.celeron;
+      if (this.selectedProcessor === 'i5') return PRICES.professional.i5;
+      return PRICES.professional.celeron;
     } else {
-      return 0; // BYO
+      return 0;
     }
   }
 
@@ -125,20 +136,21 @@ export class HardwareConfigComponent implements OnInit {
 
   getDisplayPrice(): number {
     if (this.selectedPcType !== 'ECONOMY') return 0;
-    return this.selectedDisplay === 'normal' ? 899 : 999;
+    return PRICES.economy.basePrice;
   }
 
   getProcessorPrice(): number {
     if (this.selectedPcType !== 'PROFESSIONAL') return 0;
-    return this.selectedProcessor === 'celeron' ? 1500 : 2200;
+    return this.selectedProcessor === 'celeron' ? PRICES.professional.celeron : PRICES.professional.i5;
   }
 
   private emitConfig(): void {
     this.configChanged.emit({
       pcType: this.selectedPcType,
+      menuTranslation: this.selectedMenuTranslation,  // Add this
       displayChoice: this.selectedPcType === 'ECONOMY' ? this.selectedDisplay : undefined,
       processorChoice: this.selectedPcType === 'PROFESSIONAL' ? this.selectedProcessor : undefined,
-      extras: { ...this.extras }
+      extras: { ...this.extras },
     });
   }
 
@@ -150,9 +162,19 @@ export class HardwareConfigComponent implements OnInit {
     this.back.emit();
   }
 
+  public getDisplayIcon(displayId: string): string 
+  {
+    return displayId === 'normal' ? '/icons/pp9735.png' : '/icons/pp9735wl.png';
+  }
+
+  public getProcessorIcon(processorId: string): string 
+  {
+    return '/icons/xpos.png';  // Same icon for both
+  }
+
   getDigitalKeysDisplay(): string {
-    const paid = Math.max(0, this.extras.digitalKeys - 3);
-    return `${this.extras.digitalKeys} total (${paid} paid, 3 free)`;
+    const paid = Math.max(0, this.extras.digitalKeys - PRICES.digitalKeys.freeKeys);
+    return `${this.extras.digitalKeys} total (${paid} paid, ${PRICES.digitalKeys.freeKeys} free)`;
   }
 
   isEconomy(): boolean {

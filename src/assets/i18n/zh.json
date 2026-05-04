@@ -29,9 +29,9 @@
     "title": "硬件配置",
     "subtitle": "自定义您的POS硬件设置",
     "pc": "选择您的电脑硬件",
-    "economy": "经济型",
-    "economySpecs": "无风扇 Celeron J4125，4GB内存，64GB固态硬盘，Windows 11 Pro",
-    "economyBest": "外卖，餐车，小咖啡馆",
+    "economy": "标准型",
+    "economySpecs": "无风扇 Celeron，8GB内存，128GB固态硬盘，P-CAP触摸屏，Linux",
+    "economyBest": "所有应用场景",
     "professional": "专业型",
     "professionalSpecs": "无风扇 Core i5，8GB内存，128GB固态硬盘，Windows 11 Pro",
     "professionalBest": "餐厅，快餐休闲，面包店",
@@ -50,7 +50,12 @@
     "customerDisplay": "顾客显示屏",
     "digitalKeys": "数字许可证密钥",
     "first3free": "前3个免费",
-    "total": "硬件总计"
+    "total": "硬件总计",
+    "menuTranslation": "菜单翻译",
+    "menuNone": "无需翻译",
+    "menuDutch": "荷兰语",
+    "menuChinese": "中文 荷兰语",
+    "free": "免费"
   },
   "duration": {
     "title": "使用期限和联系方式",

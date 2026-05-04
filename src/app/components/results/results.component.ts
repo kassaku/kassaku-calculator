@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { PRICES } from '../../models/prices.model'
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -57,10 +58,10 @@ export class ResultsComponent implements OnInit {
 
   calculateExtrasPrice(): number {
     const prices = {
-      secondPrinter: 150,
-      moneyDrawer: 120,
-      customerDisplay: 180,
-      digitalKeys: 25
+      secondPrinter: PRICES.extras.secondPrinter,
+      moneyDrawer: PRICES.extras.moneyDrawer,
+      customerDisplay: PRICES.extras.customerDisplay,
+      digitalKeys: PRICES.extras.digitalKey
     };
     
     let total = 0;
@@ -75,7 +76,10 @@ export class ResultsComponent implements OnInit {
   }
 
   calculateBuyTotal(): number {
-    return this.competitionPrice + this.calculateHardwarePrice() + this.calculateExtrasPrice();
+    // Competition price (their system) + your extras + menu translation
+    // NO computer price added because competition includes their own computer
+    return this.competitionPrice + this.calculateExtrasPrice() 
+    + this.getMenuTranslationPrice();
   }
 
   calculateRentTotal(): number {
@@ -272,4 +276,14 @@ export class ResultsComponent implements OnInit {
         return {};
     }
   }
+
+  getMenuTranslationPrice(): number 
+  {
+    switch(this.hardwareConfig.menuOption) {
+      case 'dutch': return 100;
+      case 'both': return 400;
+      default: return 0;
+    }
+  }
+
 } 

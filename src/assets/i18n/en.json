@@ -29,9 +29,9 @@
     "title": "Hardware Configuration",
     "subtitle": "Customize your POS hardware setup",
     "pc": "Choose Your PC Hardware",
-    "economy": "Economy",
-    "economySpecs": "Fanless Celeron J4125, 4GB RAM, 64GB SSD, Windows 11 Pro",
-    "economyBest": "Takeaway, Food truck, Small cafe",
+    "economy": "Standard",
+    "economySpecs": "Fanless Celeron, 8GB RAM, 128GB SSD, P-CAP touch, Linux",
+    "economyBest": "All applications",
     "professional": "Professional",
     "professionalSpecs": "Fanless Core i5, 8GB RAM, 128GB SSD, Windows 11 Pro",
     "professionalBest": "Restaurant, Fast casual, Bakery",
@@ -50,7 +50,12 @@
     "customerDisplay": "Customer Display",
     "digitalKeys": "Digital License Keys",
     "first3free": "First 3 free",
-    "total": "Hardware Total"
+    "total": "Hardware Total",
+    "menuTranslation": "Menu Translation",
+    "menuNone": "No translation",
+    "menuDutch": "Dutch",
+    "menuChinese": "Chinese+Dutch",
+    "free": "Free"
   },
   "duration": {
     "title": "Duration & Contact",

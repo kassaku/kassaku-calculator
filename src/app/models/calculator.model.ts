@@ -18,14 +18,14 @@ export const BUSINESS_TYPES: BusinessTypeOption[] = [
     label: 'WOK',
     icon: '🍽️',
     description: 'Fast casual, high table turnover',
-    defaultPrinters: 2
+    defaultPrinters: 1
   },
   {
     value: 'RESTAURANT',
     label: 'Restaurant',
     icon: '🍔',
     description: 'Full service, multiple courses',
-    defaultPrinters: 2
+    defaultPrinters: 1
   },
   {
     value: 'TAKEAWAY',
@@ -56,10 +56,10 @@ export interface PcOption {
 export const PC_OPTIONS: PcOption[] = [
   {
     value: 'ECONOMY',
-    name: 'Economy',
+    name: 'Standard',
     price: 0,
-    specs: 'Fanless Celeron J4125, 4GB RAM, 64GB SSD, Windows 11 Pro',
-    bestFor: 'Takeaway, Food truck, Small cafe',
+    specs: 'Fanless Celeron 2GHz, 8GB RAM, 128GB SSD, P-CAP touch, Linux',
+    bestFor: 'Alle toepassingen',
     icon: '🖥️'
   },
   {
@@ -72,9 +72,9 @@ export const PC_OPTIONS: PcOption[] = [
   },
   {
     value: 'BYO',
-    name: 'Bring Your Own PC',
-    price: 0,
-    specs: 'Minimum: Windows 10 Pro, 4GB RAM, 50GB free space',
+    name: '',
+    price: 50,
+    specs: 'Minimum: 4GB RAM, Touch screen / mouse+keyboard, 32GB disk',
     bestFor: 'Existing hardware investment',
     icon: '💻'
   }
@@ -112,6 +112,11 @@ export interface ExtrasConfig {
   moneyDrawer: number;
   customerDisplay: number;
   digitalKeys: number;
+}
+
+export interface CalculatorConfig {
+  // ... existing ...
+  menuTranslation: 'none' | 'dutch' | 'chinese';
 }
 
 // Calculator Configuration

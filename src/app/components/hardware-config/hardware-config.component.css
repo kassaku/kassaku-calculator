@@ -391,3 +391,83 @@ h3 {
 .price-breakdown span {
   margin: 0 0.25rem;
 }
+
+.display-icon, .processor-icon {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .display-icon, .processor-icon {
+    max-width: 150px;
+  }
+}
+
+.installation-fee {
+  color: #4CAF50;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.byo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Menu Translation Styles */
+.menu-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.menu-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.menu-card.selected {
+  border-color: #4CAF50;
+  background: #f0f9f0;
+}
+
+.menu-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.menu-price {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-options {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .menu-card {
+    padding: 1rem;
+  }
+}
