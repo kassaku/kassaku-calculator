@@ -1,5 +1,5 @@
 # kassaku-calculator
-An interactive **Angular** calculator that helps customers configure their POS system, compares renting vs buying, generates a break-even analysis, and captures leads via email.
+An interactive **Angular** calculator that helps customers configure their POS system, compares renting vs buying, generates a break-even analysis, and captures leads via email. Generation of PDF and e-mails in next release.
 
 # Functional Requirements
 
