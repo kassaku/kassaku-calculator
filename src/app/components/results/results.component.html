@@ -5,27 +5,43 @@
   <div class="comparison-cards">
     <div class="card buy-card">
       <h3>{{ 'results.buy' | translate }}</h3>
-      <div class="total-price">€{{ buyTotal | number }}</div>
-      <div class="price-details">
-        <div>{{ 'competition.title' | translate }}: €{{ competitionPrice | number }}</div>
-        <div>{{ 'hardware.total' | translate }}: +€{{ (buyTotal - competitionPrice) | number }}</div>
-      </div>
+      <div class="total-price">€{{ competitionTotal | number }}</div>
+        <div class="price-details">
+          @if (hardwareConfig.pcPurchaseType === 'buy') {
+            <div>Computer gekocht: €{{ hardwareConfig.pcAmount }}</div>
+            <div>Software: €{{ PRICES.rental.softwareMonthly }}/mnd</div>
+          } @else {
+            <div>Computer huur: €{{ hardwareConfig.pcAmount | number:'1.2-2' }}/mnd ({{ PRICES.rental.hardwareMonths }} mnd)</div>
+            <div>Software: €{{ PRICES.rental.softwareMonthly }}/mnd</div>
+            @if (usageMonths > PRICES.rental.hardwareMonths) {
+              <div>Na {{ PRICES.rental.hardwareMonths }} mnd: alleen software (€{{ PRICES.rental.softwareMonthly }}/mnd)</div>
+            }
+          }
+        </div>
       <div class="disclaimer">{{ 'results.oneTime' | translate }}</div>
     </div>
 
-    <div class="card rent-card">
-      <h3>{{ 'results.rent' | translate }}</h3>
-      <div class="total-price">€{{ rentTotal | number }}</div>
-      <div class="price-details">
-        <div>{{ 'results.downPayment' | translate }}: €300 + {{ 'hardware.total' | translate | lowercase }}</div>
-        <div>{{ 'results.monthly' | translate }}: €38 × {{ usageMonths }} {{ 'duration.months' | translate }}</div>
-      </div>
-      <div class="disclaimer">{{ 'results.spread' | translate }} {{ usageMonths }} {{ 'duration.months' | translate }}</div>
-    </div>
+  <div class="card rent-card">
+  <h3>{{ 'results.rent' | translate }}</h3>
+  <div class="total-price">€{{ rentTotal | number }}</div>
+  <div class="price-details">
+    @if (hardwareConfig.pcPurchaseType === 'rent') 
+    {
+      <div>Computer huur: €{{ getHardwareCostForMonth(1) | number:'1.2-2' }}/mnd ({{ PRICES.rental.hardwareMonths }} mnd, {{ PRICES.rental.buyRent * 100 }}% opslag)</div>
+      <div>Software: €{{ PRICES.rental.softwareMonthly }}/mnd</div>
+      <div *ngIf="usageMonths > PRICES.rental.hardwareMonths">Na {{ PRICES.rental.hardwareMonths }} mnd: alleen software (€{{ PRICES.rental.softwareMonthly }}/mnd)</div>
+    } 
+    @else
+    {
+      <div>Computer gekocht: €{{ calculateCostForMonth(0) }}</div>
+      <div>Software: €{{ PRICES.rental.softwareMonthly }}/mnd</div>
+    }
+  </div>
+  <div class="disclaimer">{{ 'results.spread' | translate }} {{ usageMonths }} {{ 'duration.months' | translate }}</div>
   </div>
 
-  <div class="recommendation" *ngIf="rentTotal !== buyTotal">
-    <div class="recommendation-badge" [class.rent]="rentTotal < buyTotal" [class.buy]="buyTotal < rentTotal">
+  <div class="recommendation" *ngIf="rentTotal !== competitionTotal">
+    <div class="recommendation-badge" [class.rent]="rentTotal < competitionTotal" [class.buy]="competitionTotal < rentTotal">
       <span class="recommendation-text">
         💡 <strong>{{ (getRecommendation() | translate) }}</strong> {{ 'results.saves' | translate }} 
         €{{ getSavings() | number }} {{ 'results.over' | translate }} {{ usageMonths }} {{ 'duration.months' | translate }}
@@ -50,7 +66,7 @@
     </li>
     </ul>
   </div>
-
+  
   <div class="action-buttons">
     <button class="btn-submit" (click)="onSubmit()">
       📧 {{ 'results.getQuote' | translate }}

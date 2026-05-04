@@ -3,9 +3,9 @@
 <div class="app-container">
   <header>
     <h1>{{ title }}</h1>
-    <p>Compare renting vs buying - Find your perfect POS solution</p>
+    <p>{{ 'subtitle' | translate }}</p>
     <div class="step-indicator" *ngIf="step <= 5">
-      Step {{ step }} of 5
+      {{ 'stepOf' | translate: { current: step, total: 5 } }}     
     </div>
   </header>
   

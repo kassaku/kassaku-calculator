@@ -1,4 +1,7 @@
 {
+  "subtitle": "Compare renting vs buying - Find your perfect POS solution",
+  "stepOf": "Step {{ current }} of {{ total }}",
+
   "business": {
     "title": "What type of business do you run?",
     "subtitle": "Select your business type for personalized recommendations",

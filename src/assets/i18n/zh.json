@@ -1,4 +1,7 @@
 {
+  "subtitle": "比较租赁与购买 - 找到最适合您的POS解决方案",
+  "stepOf": "第 {{ current }} 步，共 {{ total }} 步",
+
   "business": {
     "title": "您经营什么类型的业务？",
     "subtitle": "选择您的业务类型以获得个性化推荐",

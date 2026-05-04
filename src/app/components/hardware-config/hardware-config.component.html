@@ -14,11 +14,46 @@
       >
         <div class="pc-icon">{{ pc.icon }}</div>
         <h4>{{ pc.name }}</h4>
-        <div class="price" *ngIf="pc.value !== 'BYO'">€{{ pc.price }}</div>
+        
+        <!-- BYO option -->
         <div class="price byo-text" *ngIf="pc.value === 'BYO'">
           <div>{{ 'hardware.byo' | translate }}</div>
           <div class="installation-fee">{{ 'hardware.installationFee' | translate }}: €{{ PRICES.installation.byoFee }}</div>
         </div>
+        
+        <!-- Buy/Rent options for non-BYO -->
+        <div class="pricing-options" *ngIf="pc.value !== 'BYO'">
+          <div class="pricing-option" (click)="$event.stopPropagation()">
+            <label>
+              <input 
+                type="radio" 
+                name="pcPurchaseType_{{ pc.value }}" 
+                value="buy"
+                [(ngModel)]="pcPurchaseType"
+                [disabled]="selectedPcType !== pc.value"
+                (change)="onPurchaseTypeChange()"
+              >
+              <span class="pricing-label">Kopen:</span>
+              <span class="pricing-price">€{{ pc.price }}</span>
+            </label>
+          </div>
+          <div class="pricing-option" (click)="$event.stopPropagation()">
+            <label>
+              <input 
+                type="radio" 
+                name="pcPurchaseType_{{ pc.value }}" 
+                value="rent"
+                [(ngModel)]="pcPurchaseType"
+                [disabled]="selectedPcType !== pc.value"
+                (change)="onPurchaseTypeChange()"
+              >
+              <span class="pricing-label">Huren:</span>
+              <span class="pricing-price">€{{ getRentPrice(pc.price) | number:'1.2-2' }}/mnd</span>
+              <span class="pricing-note">(60 mnd)</span>
+            </label>
+          </div>
+        </div>
+        
         <p class="specs">{{ pc.specs }}</p>
         <p class="green-text">{{ pc.description }}</p>
         <div class="badge">{{ pc.bestFor }}</div>
@@ -47,7 +82,6 @@
     </div>
   </section>
 
-  <!-- Extras Configuration -->
 <!-- Extras Configuration -->
 <section class="section">
   <h3>{{ 'hardware.extras' | translate }}</h3>

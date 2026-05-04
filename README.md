@@ -292,11 +292,12 @@ Calculation logic:
 text
 
 Buy Total = competitionPrice + sum(extras)
-Rent Total = rentalDownPayment + (rentalMonthlyFee × months) + sum(extrasMonthly × months)
+Rent Total = rentalDownPayment + (softwareMonthy × months) + sum(extrasMonthly × months)
 
 Where:
 - rentalDownPayment = €300 (base) + (PC price if not BYO)
-- rentalMonthlyFee = €38 (base) + (screen monthly costs)
+- softwareMonthly = €38 (base) + (screen monthly costs)
+- hardwareMonthly = 0 or price*1,2/months 
 - extrasMonthly = optional hardware rental fee (€0 for first 3 keys, €25/key/month for extras)
 
 Acceptance Criteria:

@@ -22,6 +22,14 @@ export interface ExtrasConfig {
   digitalKeys: number;
 }
 
+
+export interface ExtrasConfig {
+  secondPrinter: number;
+  moneyDrawer: number;
+  customerDisplay: number;
+  digitalKeys: number;
+}
+
 export const PC_OPTIONS: PcOption[] = [
   {
     value: 'STANDARD_4_3',

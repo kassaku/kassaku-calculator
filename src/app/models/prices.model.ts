@@ -30,8 +30,10 @@ export const PRICES =
   
   // Rental constants
   rental: {
+    hardwareMonths: 60,
     downPayment: 0,
-    monthlyFee: 38
+    softwareMonthly: 38,
+    buyRent: 0.2
   },
   
   // Competition defaults

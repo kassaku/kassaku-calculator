@@ -2,9 +2,9 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
-import { PRICES } from '../../models/prices.model'
+import { PRICES } from '../../models/prices.model';
+import { PC_OPTIONS } from '../../models/calculator.model';
 
-// Register Chart.js components
 Chart.register(...registerables);
 
 @Component({
@@ -22,160 +22,164 @@ export class ResultsComponent implements OnInit {
   @Output() back = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
   
-  buyTotal: number = 0;
+  competitionTotal: number = 0;
   rentTotal: number = 0;
   breakEvenMonth: number = 0;
-  monthlySavings: number = 0;
   chart: Chart | undefined;
-  
-  private readonly RENTAL_BASE_DOWN = 300;
-  private readonly RENTAL_BASE_MONTHLY = 38;
-  
   advantages: string[] = [];
+  // Store cumulative totals array [0..maxMonths]
+  totalPerMonth: number[] = [];
+  // hardwareMonthly: number = 0; // only for smaller time period 
+
+  public PRICES = PRICES;
 
   constructor(private translate: TranslateService) {}
 
-  ngOnInit() {
-    this.calculateTotals();
+  ngOnInit() 
+  {
+    console.log('pcPurchaseType in results:', this.hardwareConfig?.pcPurchaseType);
+    this.calculateCompetitionTotal();
+    this.calculateCumulativeTotals();
+    this.rentTotal = this.totalPerMonth[this.usageMonths] || 0;
     this.calculateBreakEven();
     this.generateAdvantages();
     setTimeout(() => this.createChart(), 100);
   }
 
-  calculateHardwarePrice(): number {
+  // Get hardware cost for a specific month
+  // month 0: upfront cost (if buying) or 0 (if renting)
+  // month 1-60: monthly rent (if renting) or 0 (if buying)
+  // month 61+: 0
+  getHardwareCostForMonth(month: number): number 
+  {  
+    // If BYO, no hardware cost ever
     if (this.hardwareConfig.pcType === 'BYO') return 0;
     
-    if (this.hardwareConfig.pcType === 'ECONOMY') {
-      return this.hardwareConfig.displayChoice === 'normal' ? 899 : 999;
+    // Month 0: upfront cost if buying
+    if (month === 0) 
+    {
+      return this.hardwareConfig.pcAmount;
     }
     
-    if (this.hardwareConfig.pcType === 'PROFESSIONAL') {
-      return this.hardwareConfig.processorChoice === 'celeron' ? 1500 : 2200;
+    // Months 1-60: monthly rent if renting
+    else if (month < PRICES.rental.hardwareMonths 
+      && this.hardwareConfig.pcPurchaseType === 'rent') 
+    {
+      return this.hardwareConfig.pcAmount;  // Pre-calculated monthly rent
     }
     
+    // Months 61+: no hardware cost
     return 0;
   }
 
-  calculateExtrasPrice(): number {
-    const prices = {
-      secondPrinter: PRICES.extras.secondPrinter,
-      moneyDrawer: PRICES.extras.moneyDrawer,
-      customerDisplay: PRICES.extras.customerDisplay,
-      digitalKeys: PRICES.extras.digitalKey
-    };
-    
+  // Calculate extras price
+  calculateExtrasPrice(): number
+  {
     let total = 0;
-    total += this.hardwareConfig.extras.secondPrinter * prices.secondPrinter;
-    total += this.hardwareConfig.extras.moneyDrawer * prices.moneyDrawer;
-    total += this.hardwareConfig.extras.customerDisplay * prices.customerDisplay;
+    total += this.hardwareConfig.extras.secondPrinter * PRICES.extras.secondPrinter;
+    total += this.hardwareConfig.extras.moneyDrawer * PRICES.extras.moneyDrawer;
+    total += this.hardwareConfig.extras.customerDisplay * PRICES.extras.customerDisplay;
     
-    const paidKeys = Math.max(0, this.hardwareConfig.extras.digitalKeys - 3);
-    total += paidKeys * prices.digitalKeys;
+    const paidKeys = Math.max(0, this.hardwareConfig.extras.digitalKeys - PRICES.digitalKeys.freeKeys);
+    total += paidKeys * PRICES.extras.digitalKey;
     
     return total;
   }
 
-  calculateBuyTotal(): number {
-    // Competition price (their system) + your extras + menu translation
-    // NO computer price added because competition includes their own computer
-    return this.competitionPrice + this.calculateExtrasPrice() 
-    + this.getMenuTranslationPrice();
-  }
-
-  calculateRentTotal(): number {
-    const pcDown = this.hardwareConfig.pcType === 'BYO' ? 0 : this.calculateHardwarePrice();
-    const downPayment = this.RENTAL_BASE_DOWN + pcDown;
-    const totalMonthly = this.RENTAL_BASE_MONTHLY;
-    
-    return downPayment + (totalMonthly * this.usageMonths);
-  }
-
-  calculateTotals() {
-    this.buyTotal = this.calculateBuyTotal();
-    this.rentTotal = this.calculateRentTotal();
-  }
-
-  calculateBreakEven() {
-    const buyTotal = this.buyTotal;
-    const pcDown = this.hardwareConfig.pcType === 'BYO' ? 0 : this.calculateHardwarePrice();
-    const downPayment = this.RENTAL_BASE_DOWN + pcDown;
-    const monthlyCost = this.RENTAL_BASE_MONTHLY;
-    
-    if (monthlyCost <= 0) {
-      this.breakEvenMonth = 0;
-      return;
-    }
-    
-    const breakEven = (buyTotal - downPayment) / monthlyCost;
-    this.breakEvenMonth = Math.ceil(breakEven);
-    this.monthlySavings = monthlyCost;
-  }
-
-  generateAdvantages() 
+  // Get menu translation price
+  getMenuTranslationPrice(): number 
   {
-    const savingsAmount = (this.buyTotal - this.RENTAL_BASE_DOWN).toLocaleString();
-    this.advantages = [
-      'results.lowerUpfront',
-      'results.freeMaintenance',
-      'results.autoUpdates',
-      'results.taxDeductible'
-    ];
-    
-    if (this.hardwareConfig.pcType === 'BYO') 
+    switch(this.hardwareConfig.menuOption) 
     {
-      this.advantages.push('results.existingHardware');
-    }
-    
-    if (this.hardwareConfig.extras.secondPrinter > 0 || 
-        this.hardwareConfig.extras.moneyDrawer > 0 || 
-        this.hardwareConfig.extras.customerDisplay > 0) 
-    {
-      this.advantages.push('results.warranty');
-    }
-    
-    if (this.businessType === 'WOK' || this.businessType === 'RESTAURANT')
-    {
-      this.advantages.push('results.kitchenDisplay');
-    }
-    
-    if (this.businessType === 'DELIVERY') 
-    {
-      this.advantages.push('results.deliveryRouting');
-    }
-    
-    if (this.usageMonths < 71) 
-    {
-      this.advantages.push('results.savings');
-    }
-    
-    if (this.breakEvenMonth > 0 && this.breakEvenMonth < this.usageMonths) 
-    {
-      this.advantages.push('results.note');
+      case 'dutch': return PRICES.menuTranslation.dutch;
+      case 'both': return PRICES.menuTranslation.chinese;
+      default: return 0;
     }
   }
-  createChart() 
+
+  // Calculate buy total (competition + extras + menu)
+  calculateCompetitionTotal(): void 
   {
+    this.competitionTotal = this.competitionPrice + this.calculateExtrasPrice() + this.getMenuTranslationPrice();
+  }
+
+// Then just use the property directly
+  getMonthlyComputerRent(): number 
+  {
+    return this.hardwareConfig.pcAmount;
+  }
+
+
+  // Get rent total at specific month (cumulative)
+  getRentTotalAtMonth(month: number): number 
+  {
+    return this.totalPerMonth[month] || 0;
+  }
+
+
+  // Build cumulative totals array
+  calculateCumulativeTotals(): void 
+  {
+    const maxMonths = 240;
+    this.totalPerMonth = new Array(maxMonths + 1);
+    
+    let cumulative = 0;
+    
+    for (let month = 0; month <= maxMonths; month++) 
+    {
+      cumulative += this.calculateCostForMonth(month);
+      this.totalPerMonth[month] = cumulative;
+    }
+  }
+
+// Calculate break-even month
+  calculateBreakEven(): void {
+    let breakEvenMonth = 0;
+    for (let month = 1; month <= 240; month++) {
+      if (this.totalPerMonth[month] >= this.competitionTotal) {
+        breakEvenMonth = month;
+        break;
+      }
+    }
+    this.breakEvenMonth = breakEvenMonth;
+  }
+
+  // Calculate total cost for a specific month (0 = initial, 1-240 = monthly)
+  calculateCostForMonth(month: number): number {
+    // Month 0: initial costs (extras + menu + PC if bought)
+    if (month === 0) 
+    {
+      let cost = this.calculateExtrasPrice() + this.getMenuTranslationPrice();
+      
+      // Add upfront computer cost if buying (not renting)
+      if (this.hardwareConfig.pcPurchaseType === 'buy') 
+      {
+        cost += this.getHardwareCostForMonth(month);
+      }
+      return cost;
+    }
+    let cost = PRICES.rental.softwareMonthly;
+
+    cost += this.getHardwareCostForMonth(month);
+    return cost;
+  }
+
+  // Create chart using the cumulative totals array
+  createChart(): void {
     const canvas = document.getElementById('breakEvenChart') as HTMLCanvasElement;
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    const maxMonths = Math.max(this.usageMonths + 24, this.breakEvenMonth + 12);
-    const months = Array.from({length: maxMonths + 1}, (_, i) => i);
+    const maxMonths = Math.min(240, this.usageMonths + 24);
+    const months = Array.from({ length: maxMonths + 1 }, (_, i) => i);
     
-    const buyData = months.map(() => this.buyTotal);
-    const rentData = months.map(month => {
-      const pcDown = this.hardwareConfig.pcType === 'BYO' ? 0 : this.calculateHardwarePrice();
-      const downPayment = this.RENTAL_BASE_DOWN + pcDown;
-      const monthlyCost = this.RENTAL_BASE_MONTHLY;
-      return downPayment + (monthlyCost * month);
-    });
+    // Buy data (flat line)
+    const buyData = months.map(() => this.competitionTotal);
     
-    const buyLabel = this.translate.instant('results.buy');
-    const rentLabel = this.translate.instant('results.rent');
-    const monthsLabel = this.translate.instant('duration.months');
-    const costLabel = this.translate.instant('results.cost');
+    // Rent data from pre-calculated array
+    const rentData = months.map(month => this.totalPerMonth[month]);
     
     const config: ChartConfiguration = {
       type: 'line',
@@ -183,7 +187,7 @@ export class ResultsComponent implements OnInit {
         labels: months,
         datasets: [
           {
-            label: buyLabel,
+            label: this.translate.instant('results.buy'),
             data: buyData,
             borderColor: 'rgb(255, 99, 132)',
             borderWidth: 3,
@@ -191,7 +195,7 @@ export class ResultsComponent implements OnInit {
             fill: false
           },
           {
-            label: rentLabel,
+            label: this.translate.instant('results.rent'),
             data: rentData,
             borderColor: 'rgb(54, 162, 235)',
             borderWidth: 3,
@@ -212,9 +216,11 @@ export class ResultsComponent implements OnInit {
           legend: { position: 'bottom' }
         },
         scales: {
-          x: { title: { display: true, text: monthsLabel, font: { weight: 'bold' } } },
+          x: { 
+            title: { display: true, text: this.translate.instant('duration.months'), font: { weight: 'bold' } }
+          },
           y: { 
-            title: { display: true, text: costLabel, font: { weight: 'bold' } },
+            title: { display: true, text: this.translate.instant('results.cost'), font: { weight: 'bold' } },
             ticks: { callback: (value) => `€${value.toLocaleString()}` }
           }
         }
@@ -225,49 +231,67 @@ export class ResultsComponent implements OnInit {
     this.chart = new Chart(ctx, config);
   }
 
-  getRecommendation(): string 
-  {
-    if (this.rentTotal < this.buyTotal) {
-      return 'results.rent';
-    } else if (this.buyTotal < this.rentTotal) {
-      return 'results.buy';
-    } else {
-      return 'results.equal';
+  // Helper methods for template
+  getTotalExtrasPrice(): number {
+    return this.calculateExtrasPrice();
+  }
+
+
+  generateAdvantages(): void {
+    let buyPrice = 0;
+    if (this.hardwareConfig.pcPurchaseType === 'buy') 
+    {
+      buyPrice = this.hardwareConfig.pcAmount;
+    }
+    const extrasTotal = this.calculateExtrasPrice();
+    const menuTotal = this.getMenuTranslationPrice();
+    const totalUpfront = buyPrice + extrasTotal + menuTotal;
+    
+    this.advantages = [
+      'results.lowerUpfront',
+      'results.freeMaintenance',
+      'results.autoUpdates',
+      'results.taxDeductible'
+    ];
+    
+    if (this.hardwareConfig.pcType === 'BYO') {
+      this.advantages.push('results.existingHardware');
+    }
+    
+    if (extrasTotal > 0) {
+      this.advantages.push('results.warranty');
+    }
+    
+    if (this.businessType === 'WOK' || this.businessType === 'RESTAURANT') {
+      this.advantages.push('results.kitchenDisplay');
+    }
+    
+    if (this.businessType === 'DELIVERY') {
+      this.advantages.push('results.deliveryRouting');
+    }
+    
+    if (this.usageMonths < 71) {
+      this.advantages.push('results.savings');
+    }
+    
+    if (this.breakEvenMonth > 0 && this.breakEvenMonth < this.usageMonths) {
+      this.advantages.push('results.note');
     }
   }
 
-  getSavings(): number 
-  {
-    return Math.abs(this.rentTotal - this.buyTotal);
-  }
-
-  onSubmit() 
-  {
-    console.log('Submitting quote...');
-    alert('Quote generation coming soon! We will email you the full analysis.');
-  }
-
-  onBack() 
-  {
-    this.back.emit();
-  }
-
-  onRestart() 
-  {
-    this.restart.emit();
-  }
-
-  getAdvantageParams(advantage: string): any 
-  {
-    const savingsAmount = (this.buyTotal - this.RENTAL_BASE_DOWN).toLocaleString();
-    const existingHardwareSavings = this.calculateHardwarePrice().toLocaleString();
-    const rentSavings = (this.buyTotal - this.rentTotal).toLocaleString();
+  getAdvantageParams(advantage: string): any {
+    const buyPrice = 0;
+    const extrasTotal = this.calculateExtrasPrice();
+    const menuTotal = this.getMenuTranslationPrice();
+    const totalUpfront = buyPrice + extrasTotal + menuTotal;
+    const savingsAmount = (this.competitionTotal - totalUpfront).toLocaleString();
+    const rentSavings = (this.competitionTotal - this.rentTotal).toLocaleString();
     
     switch(advantage) {
       case 'results.lowerUpfront':
         return { amount: savingsAmount };
       case 'results.existingHardware':
-        return { amount: existingHardwareSavings };
+        return { amount: buyPrice.toLocaleString() };
       case 'results.savings':
         return { amount: rentSavings, months: this.usageMonths };
       case 'results.note':
@@ -277,13 +301,30 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  getMenuTranslationPrice(): number 
-  {
-    switch(this.hardwareConfig.menuOption) {
-      case 'dutch': return 100;
-      case 'both': return 400;
-      default: return 0;
+  getRecommendation(): string {
+    if (this.rentTotal < this.competitionTotal) {
+      return 'results.rent';
+    } else if (this.competitionTotal < this.rentTotal) {
+      return 'results.buy';
+    } else {
+      return 'results.equal';
     }
   }
 
-} 
+  getSavings(): number {
+    return Math.abs(this.rentTotal - this.competitionTotal);
+  }
+
+  onSubmit(): void {
+    console.log('Submitting quote...');
+    alert('Quote generation coming soon! We will email you the full analysis.');
+  }
+
+  onBack(): void {
+    this.back.emit();
+  }
+
+  onRestart(): void {
+    this.restart.emit();
+  }
+}

@@ -21,6 +21,8 @@ import { TranslateModule } from '@ngx-translate/core';
 export class HardwareConfigComponent implements OnInit {
   @Output() configChanged = new EventEmitter<{
     pcType: PcType,
+    pcPurchaseType: 'buy' | 'rent',
+    pcAmount: number,
     extras: ExtrasConfig,
     menuOption: 'none' | 'dutch' | 'both'
   }>();
@@ -33,7 +35,9 @@ export class HardwareConfigComponent implements OnInit {
   
   selectedPcType: PcType = 'PROFESSIONAL_I5';
   selectedMenuOption: 'none' | 'dutch' | 'both' = 'none';
-  
+  pcPurchaseType: 'buy' | 'rent' = 'buy';
+  pcAmount: number = 0;
+
   extras: ExtrasConfig = {
     secondPrinter: 0,
     moneyDrawer: 0,
@@ -42,10 +46,6 @@ export class HardwareConfigComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.emitConfig();
-  }
-
-  onPcTypeChange(): void {
     this.emitConfig();
   }
 
@@ -63,6 +63,17 @@ export class HardwareConfigComponent implements OnInit {
     if (newQty >= 0 && newQty <= maxQuantities[itemId]) {
       this.extras[itemId] = newQty as never;
       this.emitConfig();
+    }
+  }
+
+  calculatePcAmount(): number {
+    const buyPrice = this.getBasePrice();
+    
+    if (this.pcPurchaseType === 'buy') {
+      return buyPrice;  // Full price
+    } else {
+      // Rent: calculate monthly amount
+      return this.getRentPrice(buyPrice);
     }
   }
 
@@ -92,6 +103,16 @@ export class HardwareConfigComponent implements OnInit {
     return selected ? selected.price : 0;
   }
 
+  getRentPrice(buyPrice: number): number {
+    // Add 20% markup, then divide by N months, round up to nearest 20 cent
+    const months = PRICES.rental.hardwareMonths;
+    const rent = PRICES.rental.buyRent;
+    const totalWithMarkup = buyPrice * (1 + rent);
+    const monthly = totalWithMarkup / months;
+    // Round up to nearest 0.20 (20 cent)
+    return Math.ceil(monthly / 0.2) * 0.2;
+  }
+
   getTotalPrice(): number {
     return this.getBasePrice() + this.getTotalExtrasPrice() + this.getMenuPrice();
   }
@@ -104,9 +125,22 @@ export class HardwareConfigComponent implements OnInit {
     }
   }
 
+  onPcTypeChange(): void {
+    this.pcAmount = this.calculatePcAmount();
+    this.emitConfig();
+  }
+
+  onPurchaseTypeChange(): void {
+    this.pcAmount = this.calculatePcAmount();
+    this.emitConfig();
+  }
+
   private emitConfig(): void {
+    this.pcAmount = this.calculatePcAmount();
     this.configChanged.emit({
       pcType: this.selectedPcType,
+      pcPurchaseType: this.pcPurchaseType, 
+      pcAmount: this.pcAmount,
       extras: { ...this.extras },
       menuOption: this.selectedMenuOption
     });

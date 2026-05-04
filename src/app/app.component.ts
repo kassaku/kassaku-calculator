@@ -7,12 +7,15 @@ import { DurationEmailComponent } from './components/duration-email/duration-ema
 import { ResultsComponent } from './components/results/results.component';
 import { BusinessType, PcType, ExtrasConfig } from './models/calculator.model';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
+import { PRICES } from './models/prices.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule, 
+    TranslateModule,
     BusinessTypeSelectionComponent, 
     CompetitionPriceComponent, 
     HardwareConfigComponent, 
@@ -26,7 +29,7 @@ import { LanguageSwitcherComponent } from './components/language-switcher/langua
 export class AppComponent {
   title = 'kassaku-calculator';
   step: number = 1;
-  
+
   // Step 1
   selectedBusinessType: BusinessType | null = null;
   
@@ -36,10 +39,14 @@ export class AppComponent {
   // Step 3 - Updated for new PC types
   hardwareConfig: {
     pcType: PcType, 
+    pcPurchaseType: 'buy' | 'rent',
+    pcAmount: number,  // ← ADD THIS
     extras: ExtrasConfig,
     menuOption: 'none' | 'dutch' | 'both'
   } = {
     pcType: 'PROFESSIONAL_I5',
+    pcPurchaseType: 'buy',
+    pcAmount: 2420,  // ← ADD THIS (full buy price for Professional i5)
     extras: {
       secondPrinter: 0,
       moneyDrawer: 0,
@@ -55,7 +62,7 @@ export class AppComponent {
     email: string,
     newsletterOptIn: boolean
   } = {
-    usageMonths: 60,
+    usageMonths: PRICES.rental.hardwareMonths,
     email: '',
     newsletterOptIn: true
   };
@@ -70,6 +77,8 @@ export class AppComponent {
 
   onHardwareConfigChanged(config: {
     pcType: PcType, 
+    pcPurchaseType: 'buy' | 'rent',
+    pcAmount: number,
     extras: ExtrasConfig,
     menuOption: 'none' | 'dutch' | 'both'
   }) {
@@ -106,6 +115,8 @@ export class AppComponent {
     this.competitionPrice = 3000;
     this.hardwareConfig = {
       pcType: 'PROFESSIONAL_I5',
+      pcPurchaseType: 'buy',
+      pcAmount: 2420,  // ← ADD THIS
       extras: {
         secondPrinter: 0,
         moneyDrawer: 0,
@@ -115,7 +126,7 @@ export class AppComponent {
       menuOption: 'none'
     };
     this.durationEmailConfig = {
-      usageMonths: 60,
+      usageMonths: PRICES.rental.hardwareMonths,
       email: '',
       newsletterOptIn: true
     };
@@ -131,7 +142,8 @@ export class AppComponent {
     return this.selectedBusinessType ? types[this.selectedBusinessType] : 'Not selected';
   }
 
-  getHardwareSummary(): string {
+  getHardwareSummary(): string 
+  {
     const pc = this.hardwareConfig.pcType;
     switch(pc) {
       case 'STANDARD_4_3':

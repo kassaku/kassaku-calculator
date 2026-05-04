@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';  
+import { PRICES } from '../../models/prices.model';
 
 @Component({
   selector: 'app-duration-email',
@@ -14,7 +15,7 @@ export class DurationEmailComponent implements OnInit {
   @Output() configChanged = new EventEmitter<{usageMonths: number, email: string, newsletterOptIn: boolean}>();
   @Output() next = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();
-  @Input() usageMonths: number = 60;
+  @Input() usageMonths: number = PRICES.rental.hardwareMonths;
   @Input() email: string = '';
   @Input() newsletterOptIn: boolean = true;
   @Input() businessTypeName: string = '';
@@ -22,7 +23,7 @@ export class DurationEmailComponent implements OnInit {
   @Input() hardwareSummary: string = '';
 
   // UI state
-  usageMonthsSlider: number = 60;
+  usageMonthsSlider: number = PRICES.rental.hardwareMonths;
   confirmEmail: string = '';
   emailError: string = '';
   matchError: string = '';

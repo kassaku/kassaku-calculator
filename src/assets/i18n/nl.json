@@ -1,4 +1,7 @@
 {
+  "subtitle": "Vergelijk huren versus kopen - Vind de perfecte POS oplossing",
+  "stepOf": "Stap {{ current }} van {{ total }}",
+
   "business": {
     "title": "Wat voor type bedrijf heb je?",
     "subtitle": "Selecteer je bedrijfstype voor persoonlijke aanbevelingen",
