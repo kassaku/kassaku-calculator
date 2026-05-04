@@ -4,9 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { 
   PcType, 
   PcOption, 
-  PC_OPTIONS, 
-  DISPLAY_OPTIONS,
-  PROCESSOR_OPTIONS,
+  PC_OPTIONS,
   ExtrasConfig, 
   BusinessType 
 } from '../../models/calculator.model';
@@ -22,25 +20,19 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class HardwareConfigComponent implements OnInit {
   @Output() configChanged = new EventEmitter<{
-    pcType: PcType, 
-    menuTranslation: string,
-    displayChoice?: string,
-    processorChoice?: string,
-    extras: ExtrasConfig
+    pcType: PcType,
+    extras: ExtrasConfig,
+    menuOption: 'none' | 'dutch' | 'both'
   }>();
   @Output() next = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();
   @Input() businessType: BusinessType | null = null;
 
   pcOptions = PC_OPTIONS;
-  displayOptions = DISPLAY_OPTIONS;
-  processorOptions = PROCESSOR_OPTIONS;
   public PRICES = PRICES;
-
-  selectedMenuTranslation: string = 'none';
-  selectedPcType: PcType = 'PROFESSIONAL';
-  selectedDisplay: string = 'widescreen';
-  selectedProcessor: string = 'i5';
+  
+  selectedPcType: PcType = 'PROFESSIONAL_I5';
+  selectedMenuOption: 'none' | 'dutch' | 'both' = 'none';
   
   extras: ExtrasConfig = {
     secondPrinter: 0,
@@ -54,29 +46,6 @@ export class HardwareConfigComponent implements OnInit {
   }
 
   onPcTypeChange(): void {
-    if (this.selectedPcType === 'ECONOMY') {
-      this.selectedDisplay = 'normal';
-    } else if (this.selectedPcType === 'PROFESSIONAL') {
-      this.selectedProcessor = 'i5';
-    }
-    this.emitConfig();
-  }
-
-  onDisplayChange(): void {
-    this.emitConfig();
-  }
-
-  getBasePriceForType(pcType: PcType): number 
-  {
-    if (pcType === 'ECONOMY') {
-      return PRICES.economy.basePrice;
-    } else if (pcType === 'PROFESSIONAL') {
-      return this.selectedProcessor === 'celeron' ? PRICES.professional.celeron : PRICES.professional.i5;
-    }
-    return 0;
-  }
-
-  onProcessorChange(): void {
     this.emitConfig();
   }
 
@@ -119,38 +88,27 @@ export class HardwareConfigComponent implements OnInit {
   }
 
   getBasePrice(): number {
-    if (this.selectedPcType === 'ECONOMY') {
-      return PRICES.economy.basePrice;
-    } else if (this.selectedPcType === 'PROFESSIONAL') {
-      if (this.selectedProcessor === 'celeron') return PRICES.professional.celeron;
-      if (this.selectedProcessor === 'i5') return PRICES.professional.i5;
-      return PRICES.professional.celeron;
-    } else {
-      return 0;
-    }
+    const selected = this.pcOptions.find(p => p.value === this.selectedPcType);
+    return selected ? selected.price : 0;
   }
 
   getTotalPrice(): number {
-    return this.getBasePrice() + this.getTotalExtrasPrice();
+    return this.getBasePrice() + this.getTotalExtrasPrice() + this.getMenuPrice();
   }
 
-  getDisplayPrice(): number {
-    if (this.selectedPcType !== 'ECONOMY') return 0;
-    return PRICES.economy.basePrice;
-  }
-
-  getProcessorPrice(): number {
-    if (this.selectedPcType !== 'PROFESSIONAL') return 0;
-    return this.selectedProcessor === 'celeron' ? PRICES.professional.celeron : PRICES.professional.i5;
+  getMenuPrice(): number {
+    switch(this.selectedMenuOption) {
+      case 'dutch': return PRICES.menuTranslation.dutch;
+      case 'both': return PRICES.menuTranslation.chinese;
+      default: return 0;
+    }
   }
 
   private emitConfig(): void {
     this.configChanged.emit({
       pcType: this.selectedPcType,
-      menuTranslation: this.selectedMenuTranslation,  // Add this
-      displayChoice: this.selectedPcType === 'ECONOMY' ? this.selectedDisplay : undefined,
-      processorChoice: this.selectedPcType === 'PROFESSIONAL' ? this.selectedProcessor : undefined,
       extras: { ...this.extras },
+      menuOption: this.selectedMenuOption
     });
   }
 
@@ -162,30 +120,8 @@ export class HardwareConfigComponent implements OnInit {
     this.back.emit();
   }
 
-  public getDisplayIcon(displayId: string): string 
-  {
-    return displayId === 'normal' ? '/icons/pp9735.png' : '/icons/pp9735wl.png';
-  }
-
-  public getProcessorIcon(processorId: string): string 
-  {
-    return '/icons/xpos.png';  // Same icon for both
-  }
-
   getDigitalKeysDisplay(): string {
     const paid = Math.max(0, this.extras.digitalKeys - PRICES.digitalKeys.freeKeys);
     return `${this.extras.digitalKeys} total (${paid} paid, ${PRICES.digitalKeys.freeKeys} free)`;
-  }
-
-  isEconomy(): boolean {
-    return this.selectedPcType === 'ECONOMY';
-  }
-
-  isProfessional(): boolean {
-    return this.selectedPcType === 'PROFESSIONAL';
-  }
-
-  isBYO(): boolean {
-    return this.selectedPcType === 'BYO';
   }
 }

@@ -1,18 +1,15 @@
 // Central price configuration
-export const PRICES = {
-  // Economy (Standard) prices
-  economy: {
-    basePrice: 1600,  // Both normal and widescreen
-    displayPrice: 0    // Included in base price
+export const PRICES = 
+{
+  // PC prices - 4 distinct models
+  pc: {
+    standardCeleron: 1600,     // Standard model with Celeron
+    standardI5: 1800,          // Standard model with i5 (if available)
+    professionalCeleron: 2180, // Professional/Luxe model with Celeron
+    professionalI5: 2420       // Professional/Luxe model with i5 (server capable)
   },
-  
-  // Professional prices
-  professional: {
-    celeron: 2180,
-    i5: 2420
-  },
-  
-    installation: 
+
+  installation: 
   {
     byoFee: 50
   },
@@ -53,7 +50,7 @@ export const PRICES = {
   
   // Digital keys
   digitalKeys: {
-    freeKeys: 3,
+    freeKeys: 3, 
     maxKeys: 30
   }
 };

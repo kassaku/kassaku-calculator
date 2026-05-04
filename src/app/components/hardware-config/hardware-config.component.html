@@ -2,7 +2,7 @@
   <h2>{{ 'hardware.title' | translate }}</h2>
   <p class="subtitle">{{ 'hardware.subtitle' | translate }}</p>
 
-  <!-- PC Selection -->
+  <!-- PC Selection - 5 options -->
   <section class="section">
     <h3>{{ 'hardware.pc' | translate }}</h3>
     <div class="pc-options">
@@ -13,56 +13,15 @@
         (click)="selectedPcType = pc.value; onPcTypeChange()"
       >
         <div class="pc-icon">{{ pc.icon }}</div>
-        <h4>{{ 'hardware.' + pc.value.toLowerCase() | translate }}</h4>
-        
-        <!-- Price for Economy and Professional -->
-        <div class="price" *ngIf="pc.value !== 'BYO'">€{{ getBasePriceForType(pc.value) }}</div>
-        
-        <!-- BYO section with installation fee -->
+        <h4>{{ pc.name }}</h4>
+        <div class="price" *ngIf="pc.value !== 'BYO'">€{{ pc.price }}</div>
         <div class="price byo-text" *ngIf="pc.value === 'BYO'">
           <div>{{ 'hardware.byo' | translate }}</div>
           <div class="installation-fee">{{ 'hardware.installationFee' | translate }}: €{{ PRICES.installation.byoFee }}</div>
         </div>
-        
         <p class="specs">{{ pc.specs }}</p>
-        <div class="badge">{{ 'hardware.' + pc.value.toLowerCase() + 'Best' | translate }}</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Economy Display Options -->
-  @if (isEconomy())
-  {
-    <section class="section">
-      <h3>{{ 'hardware.display' | translate }}</h3>
-      <div class="display-options">
-        <div 
-          *ngFor="let display of displayOptions"
-          class="display-card"
-          [class.selected]="selectedDisplay === display.id"
-          (click)="selectedDisplay = display.id; onDisplayChange()"
-        >
-          <img [src]="getDisplayIcon(display.id)" alt="{{ display.id }}" class="display-icon">
-          <div class="display-name">{{ 'hardware.' + display.id | translate }}</div>
-          <div class="display-aspect">{{ display.aspectRatio }}</div>
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- Professional Processor Options -->
-  <section class="section" *ngIf="isProfessional()">
-    <h3>{{ 'hardware.processor' | translate }}</h3>
-    <div class="processor-options">
-      <div 
-        *ngFor="let processor of processorOptions"
-        class="processor-card"
-        [class.selected]="selectedProcessor === processor.id"
-        (click)="selectedProcessor = processor.id; onProcessorChange()"
-      >
-        <img [src]="getProcessorIcon(processor.id)" alt="{{ processor.id }}" class="processor-icon">
-        <div class="processor-name">{{ 'hardware.' + processor.id | translate }}</div>
-        <div class="processor-price">€{{ processor.id === 'celeron' ? PRICES.professional.celeron : PRICES.professional.i5 }}</div>
+        <p class="green-text">{{ pc.description }}</p>
+        <div class="badge">{{ pc.bestFor }}</div>
       </div>
     </div>
   </section>
@@ -71,88 +30,81 @@
   <section class="section">
     <h3>{{ 'hardware.menuTranslation' | translate }}</h3>
     <div class="menu-options">
-      <div 
-        class="menu-card"
-        [class.selected]="selectedMenuTranslation === 'none'"
-        (click)="selectedMenuTranslation = 'none'"
-      >
+      <div class="menu-card" [class.selected]="selectedMenuOption === 'none'" (click)="selectedMenuOption = 'none'">
         <div class="menu-name">{{ 'hardware.menuNone' | translate }}</div>
         <div class="menu-price">{{ 'hardware.free' | translate }}</div>
       </div>
       
-      <div 
-        class="menu-card"
-        [class.selected]="selectedMenuTranslation === 'dutch'"
-        (click)="selectedMenuTranslation = 'dutch'"
-      >
+      <div class="menu-card" [class.selected]="selectedMenuOption === 'dutch'" (click)="selectedMenuOption = 'dutch'">
         <div class="menu-name">{{ 'hardware.menuDutch' | translate }}</div>
         <div class="menu-price">€{{ PRICES.menuTranslation.dutch }}</div>
       </div>
       
-      <div 
-        class="menu-card"
-        [class.selected]="selectedMenuTranslation === 'chinese'"
-        (click)="selectedMenuTranslation = 'chinese'"
-      >
-        <div class="menu-name">{{ 'hardware.menuChinese' | translate }}</div>
+      <div class="menu-card" [class.selected]="selectedMenuOption === 'both'" (click)="selectedMenuOption = 'both'">
+        <div class="menu-name">{{ 'hardware.menuBoth' | translate }}</div>
         <div class="menu-price">€{{ PRICES.menuTranslation.chinese }}</div>
       </div>
     </div>
   </section>
 
-  <!-- Extras Configuration (prices updated from PRICES) -->
-  <section class="section">
-    <h3>{{ 'hardware.extras' | translate }}</h3>
-    <div class="extras-list">
-      <div class="extra-item">
-        <div class="extra-info">
-          <div class="extra-name">{{ 'hardware.secondPrinter' | translate }}</div>
-          <div class="extra-price">€{{ PRICES.extras.secondPrinter }}</div>
-        </div>
-        <div class="extra-controls">
-          <button (click)="updateExtra('secondPrinter', -1)" [disabled]="extras.secondPrinter === 0">-</button>
-          <span class="quantity">{{ extras.secondPrinter }}</span>
-          <button (click)="updateExtra('secondPrinter', 1)" [disabled]="extras.secondPrinter === 2">+</button>
-        </div>
+  <!-- Extras Configuration -->
+<!-- Extras Configuration -->
+<section class="section">
+  <h3>{{ 'hardware.extras' | translate }}</h3>
+  <div class="extras-list">
+    <!-- Second Printer -->
+    <div class="extra-item">
+      <div class="extra-info">
+        <div class="extra-name">{{ 'hardware.secondPrinter' | translate }}</div>
+        <div class="extra-price">€{{ PRICES.extras.secondPrinter }}</div>
       </div>
-
-      <div class="extra-item">
-        <div class="extra-info">
-          <div class="extra-name">{{ 'hardware.moneyDrawer' | translate }}</div>
-          <div class="extra-price">€{{ PRICES.extras.moneyDrawer }}</div>
-        </div>
-        <div class="extra-controls">
-          <button (click)="updateExtra('moneyDrawer', -1)" [disabled]="extras.moneyDrawer === 0">-</button>
-          <span class="quantity">{{ extras.moneyDrawer }}</span>
-          <button (click)="updateExtra('moneyDrawer', 1)" [disabled]="extras.moneyDrawer === 1">+</button>
-        </div>
-      </div>
-
-      <div class="extra-item">
-        <div class="extra-info">
-          <div class="extra-name">{{ 'hardware.customerDisplay' | translate }}</div>
-          <div class="extra-price">€{{ PRICES.extras.customerDisplay }}</div>
-        </div>
-        <div class="extra-controls">
-          <button (click)="updateExtra('customerDisplay', -1)" [disabled]="extras.customerDisplay === 0">-</button>
-          <span class="quantity">{{ extras.customerDisplay }}</span>
-          <button (click)="updateExtra('customerDisplay', 1)" [disabled]="extras.customerDisplay === 1">+</button>
-        </div>
-      </div>
-
-      <div class="extra-item">
-        <div class="extra-info">
-          <div class="extra-name">{{ 'hardware.digitalKeys' | translate }}</div>
-          <div class="extra-price">{{ 'hardware.first3free' | translate }}</div>
-        </div>
-        <div class="extra-controls">
-          <button (click)="updateExtra('digitalKeys', -1)" [disabled]="extras.digitalKeys === 0">-</button>
-          <span class="quantity">{{ getDigitalKeysDisplay() }}</span>
-          <button (click)="updateExtra('digitalKeys', 1)" [disabled]="extras.digitalKeys === PRICES.digitalKeys.maxKeys">+</button>
-        </div>
+      <div class="extra-controls">
+        <button (click)="updateExtra('secondPrinter', -1)" [disabled]="extras.secondPrinter === 0">-</button>
+        <span class="quantity">{{ extras.secondPrinter }}</span>
+        <button (click)="updateExtra('secondPrinter', 1)" [disabled]="extras.secondPrinter === 2">+</button>
       </div>
     </div>
-  </section>
+
+    <!-- Money Drawer -->
+    <div class="extra-item">
+      <div class="extra-info">
+        <div class="extra-name">{{ 'hardware.moneyDrawer' | translate }}</div>
+        <div class="extra-price">€{{ PRICES.extras.moneyDrawer }}</div>
+      </div>
+      <div class="extra-controls">
+        <button (click)="updateExtra('moneyDrawer', -1)" [disabled]="extras.moneyDrawer === 0">-</button>
+        <span class="quantity">{{ extras.moneyDrawer }}</span>
+        <button (click)="updateExtra('moneyDrawer', 1)" [disabled]="extras.moneyDrawer === 1">+</button>
+      </div>
+    </div>
+
+    <!-- Customer Display -->
+    <div class="extra-item">
+      <div class="extra-info">
+        <div class="extra-name">{{ 'hardware.customerDisplay' | translate }}</div>
+        <div class="extra-price">€{{ PRICES.extras.customerDisplay }}</div>
+      </div>
+      <div class="extra-controls">
+        <button (click)="updateExtra('customerDisplay', -1)" [disabled]="extras.customerDisplay === 0">-</button>
+        <span class="quantity">{{ extras.customerDisplay }}</span>
+        <button (click)="updateExtra('customerDisplay', 1)" [disabled]="extras.customerDisplay === 1">+</button>
+      </div>
+    </div>
+
+    <!-- Digital Keys -->
+    <div class="extra-item">
+      <div class="extra-info">
+        <div class="extra-name">{{ 'hardware.digitalKeys' | translate }}</div>
+        <div class="extra-price">{{ 'hardware.first3free' | translate }}</div>
+      </div>
+      <div class="extra-controls">
+        <button (click)="updateExtra('digitalKeys', -1)" [disabled]="extras.digitalKeys === 0">-</button>
+        <span class="quantity">{{ getDigitalKeysDisplay() }}</span>
+        <button (click)="updateExtra('digitalKeys', 1)" [disabled]="extras.digitalKeys === PRICES.digitalKeys.maxKeys">+</button>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Total Summary -->
   <div class="total-summary">
@@ -160,11 +112,7 @@
   </div>
 
   <div class="navigation-buttons">
-    <button class="btn-back" (click)="onBack()">
-      ← {{ 'buttons.back' | translate }}
-    </button>
-    <button class="btn-next" (click)="onNext()">
-      {{ 'buttons.next' | translate }}
-    </button>
+    <button class="btn-back" (click)="onBack()">← {{ 'buttons.back' | translate }}</button>
+    <button class="btn-next" (click)="onNext()">{{ 'buttons.next' | translate }}</button>
   </div>
 </div>

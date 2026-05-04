@@ -33,22 +33,20 @@ export class AppComponent {
   // Step 2
   competitionPrice: number = 3000;
   
-  // Step 3
+  // Step 3 - Updated for new PC types
   hardwareConfig: {
     pcType: PcType, 
-    displayChoice?: string,
-    processorChoice?: string,
-    extras: ExtrasConfig
+    extras: ExtrasConfig,
+    menuOption: 'none' | 'dutch' | 'both'
   } = {
-    pcType: 'PROFESSIONAL',
-    displayChoice: 'widescreen',
-    processorChoice: 'i5',
+    pcType: 'PROFESSIONAL_I5',
     extras: {
       secondPrinter: 0,
       moneyDrawer: 0,
       customerDisplay: 0,
       digitalKeys: 3
-    }
+    },
+    menuOption: 'none'
   };
   
   // Step 4
@@ -72,9 +70,8 @@ export class AppComponent {
 
   onHardwareConfigChanged(config: {
     pcType: PcType, 
-    displayChoice?: string,
-    processorChoice?: string,
-    extras: ExtrasConfig
+    extras: ExtrasConfig,
+    menuOption: 'none' | 'dutch' | 'both'
   }) {
     this.hardwareConfig = config;
   }
@@ -108,15 +105,14 @@ export class AppComponent {
     this.selectedBusinessType = null;
     this.competitionPrice = 3000;
     this.hardwareConfig = {
-      pcType: 'PROFESSIONAL',
-      displayChoice: 'widescreen',
-      processorChoice: 'i5',
+      pcType: 'PROFESSIONAL_I5',
       extras: {
         secondPrinter: 0,
         moneyDrawer: 0,
         customerDisplay: 0,
         digitalKeys: 3
-      }
+      },
+      menuOption: 'none'
     };
     this.durationEmailConfig = {
       usageMonths: 60,
@@ -136,17 +132,20 @@ export class AppComponent {
   }
 
   getHardwareSummary(): string {
-    if (this.hardwareConfig.pcType === 'BYO') {
-      return 'Bring Your Own PC';
+    const pc = this.hardwareConfig.pcType;
+    switch(pc) {
+      case 'STANDARD_4_3':
+        return 'Standard 4:3';
+      case 'STANDARD_WIDESCREEN':
+        return 'Standard Widescreen';
+      case 'PROFESSIONAL_CELERON':
+        return 'Professional Celeron';
+      case 'PROFESSIONAL_I5':
+        return 'Professional Core i5';
+      case 'BYO':
+        return 'Bring Your Own PC';
+      default:
+        return 'Configured';
     }
-    if (this.hardwareConfig.pcType === 'ECONOMY') {
-      const display = this.hardwareConfig.displayChoice === 'normal' ? 'Normal (4:3)' : 'Widescreen (16:9)';
-      return `Economy PC with ${display} display`;
-    }
-    if (this.hardwareConfig.pcType === 'PROFESSIONAL') {
-      const processor = this.hardwareConfig.processorChoice === 'celeron' ? 'Celeron' : 'Intel Core i5';
-      return `Professional PC with ${processor} processor`;
-    }
-    return 'Configured';
   }
 }

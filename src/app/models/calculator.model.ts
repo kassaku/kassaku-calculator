@@ -1,112 +1,20 @@
-// Type definitions
+// calculator.model.ts
+
+import { PRICES } from './prices.model'
+
 export type BusinessType = 'WOK' | 'RESTAURANT' | 'TAKEAWAY' | 'DELIVERY';
-export type PcType = 'ECONOMY' | 'PROFESSIONAL' | 'BYO';
+export type PcType = 'STANDARD_4_3' | 'STANDARD_WIDESCREEN' | 'PROFESSIONAL_CELERON' | 'PROFESSIONAL_I5' | 'BYO';
 
-// Business type option interface
-export interface BusinessTypeOption {
-  value: BusinessType;
-  label: string;
-  icon: string;
-  description: string;
-  defaultPrinters: number;
-}
-
-// Export the business types array
-export const BUSINESS_TYPES: BusinessTypeOption[] = [
-  {
-    value: 'WOK',
-    label: 'WOK',
-    icon: '🍽️',
-    description: 'Fast casual, high table turnover',
-    defaultPrinters: 1
-  },
-  {
-    value: 'RESTAURANT',
-    label: 'Restaurant',
-    icon: '🍔',
-    description: 'Full service, multiple courses',
-    defaultPrinters: 1
-  },
-  {
-    value: 'TAKEAWAY',
-    label: 'Takeaway',
-    icon: '📦',
-    description: 'Pickup only, no dine-in',
-    defaultPrinters: 1
-  },
-  {
-    value: 'DELIVERY',
-    label: 'Delivery',
-    icon: '🛵',
-    description: 'No physical location',
-    defaultPrinters: 1
-  }
-];
-
-// PC Options
 export interface PcOption {
   value: PcType;
   name: string;
   price: number;
   specs: string;
+  description: string;
   bestFor: string;
   icon: string;
 }
 
-export const PC_OPTIONS: PcOption[] = [
-  {
-    value: 'ECONOMY',
-    name: 'Standard',
-    price: 0,
-    specs: 'Fanless Celeron 2GHz, 8GB RAM, 128GB SSD, P-CAP touch, Linux',
-    bestFor: 'Alle toepassingen',
-    icon: '🖥️'
-  },
-  {
-    value: 'PROFESSIONAL',
-    name: 'Professional',
-    price: 0,
-    specs: 'Fanless Core i5, 8GB RAM, 128GB SSD, Windows 11 Pro',
-    bestFor: 'Restaurant, Fast casual, Bakery',
-    icon: '💼'
-  },
-  {
-    value: 'BYO',
-    name: '',
-    price: 50,
-    specs: 'Minimum: 4GB RAM, Touch screen / mouse+keyboard, 32GB disk',
-    bestFor: 'Existing hardware investment',
-    icon: '💻'
-  }
-];
-
-// Display options for Economy tier
-export interface DisplayOption {
-  id: string;
-  name: string;
-  price: number;
-  aspectRatio: string;
-}
-
-export const DISPLAY_OPTIONS: DisplayOption[] = [
-  { id: 'normal', name: 'Normal Display', price: 899, aspectRatio: '4:3' },
-  { id: 'widescreen', name: 'Widescreen Display', price: 999, aspectRatio: '16:9' }
-];
-
-// Professional tier processor options
-export interface ProcessorOption {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-}
-
-export const PROCESSOR_OPTIONS: ProcessorOption[] = [
-  { id: 'celeron', name: 'Celeron', price: 1500, description: 'Entry-level performance' },
-  { id: 'i5', name: 'Intel Core i5', price: 2200, description: 'High performance' }
-];
-
-// Extras Configuration
 export interface ExtrasConfig {
   secondPrinter: number;
   moneyDrawer: number;
@@ -114,20 +22,50 @@ export interface ExtrasConfig {
   digitalKeys: number;
 }
 
-export interface CalculatorConfig {
-  // ... existing ...
-  menuTranslation: 'none' | 'dutch' | 'chinese';
-}
-
-// Calculator Configuration
-export interface CalculatorConfig {
-  businessType: BusinessType | null;
-  competitionPrice: number;
-  usageMonths: number;
-  pcType: PcType;
-  displayChoice?: string;
-  processorChoice?: string;
-  extras: ExtrasConfig;
-  email: string;
-  newsletterOptIn: boolean;
-}
+export const PC_OPTIONS: PcOption[] = [
+  {
+    value: 'STANDARD_4_3',
+    name: 'Standard 4:3',
+    price: PRICES.pc.standardCeleron,
+    specs: 'Fanless Celeron, 8GB RAM, 128GB SSD, P-CAP touch, Linux, 4:3 display',
+    description: '✓ Standaard model, 4:3 beeldverhouding, betrouwbaar en betaalbaar',
+    bestFor: 'Basis POS behoeften',
+    icon: '🖥️'
+  },
+  {
+    value: 'STANDARD_WIDESCREEN',
+    name: 'Standard Widescreen',
+    price: PRICES.pc.standardCeleron,
+    specs: 'Fanless Celeron, 8GB RAM, 128GB SSD, P-CAP touch, Linux, 16:9 display',
+    description: '✓ Standaard model, breedbeeld, moderner uiterlijk',
+    bestFor: 'Basis POS behoeften, modern design',
+    icon: '🖥️'
+  },
+  {
+    value: 'PROFESSIONAL_CELERON',
+    name: 'Professional Celeron',
+    price: PRICES.pc.professionalCeleron,
+    specs: 'Luxe model, Celeron, hogere resolutie, neemt minder ruimte',
+    description: '✓ Luxe uitstraling, normale snelheid, perfect voor moderne zaken',
+    bestFor: 'Design-bewuste restaurants',
+    icon: '💼'
+  },
+  {
+    value: 'PROFESSIONAL_I5',
+    name: 'Professional Core i5',
+    price: PRICES.pc.professionalI5,
+    specs: 'Luxe model, Core i5, server-grade performance, compact design',
+    description: '✓ Server model, hoogste snelheid, manager functies, database blijft snel',
+    bestFor: 'Multi-POS netwerken, server functionaliteit',
+    icon: '💼'
+  },
+  {
+    value: 'BYO',
+    name: 'Bring Your Own PC',
+    price: 0,
+    specs: 'Minimum: Windows 10 Pro, 4GB RAM, 50GB free space',
+    description: '✓ Gebruik uw eigen hardware',
+    bestFor: 'Bestaande investering',
+    icon: '💻'
+  }
+];
