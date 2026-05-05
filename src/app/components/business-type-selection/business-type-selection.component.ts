@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
-export type BusinessType = 'WOK' | 'RESTAURANT' | 'TAKEAWAY' | 'DELIVERY';
+export type BusinessType = 'TAKEAWAY'| 'CAFETARIA' | 'RESTAURANT' | 'WOK' | 'DELIVERY';
 
 @Component({
   selector: 'app-business-type-selection',

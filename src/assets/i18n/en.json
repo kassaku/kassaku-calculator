@@ -5,14 +5,16 @@
   "business": {
     "title": "What type of business do you run?",
     "subtitle": "Select your business type for personalized recommendations",
-    "wok": "WOK",
-    "wokDesc": "Fast casual, high table turnover",
-    "restaurant": "Restaurant",
-    "restaurantDesc": "Full service, multiple courses",
+    "cafetaria": "Snack Bar / Fast Food",
+    "cafetariaDesc": "Snack bar serving fries, snacks, and drinks. Features include order modifications, dine-in or takeaway options, bottle deposit handling, and special customer requests.",
     "takeaway": "Takeaway",
-    "takeawayDesc": "Pickup only, no dine-in",
+    "takeawayDesc": "Pickup-only service. Customers order at the counter or online. Features include swiping, combos, quick buttons, portions, twin items, price changes, and even creating new dishes while ordering.",
+    "wok": "WOK / Fast Casual",
+    "wokDesc": "Fast casual with high table turnover. Customers choose their own ingredients and sauce. Quick wok preparation.",
+    "restaurant": "Restaurant",
+    "restaurantDesc": "Full-service restaurant with multiple courses. Table service, reservations, floor plans, table splitting/merging, drink refills, and payment options. Can work alongside a takeaway system.",
     "delivery": "Delivery",
-    "deliveryDesc": "No physical location",
+    "deliveryDesc": "No physical location. Delivery with postal codes, address registration, and customer data management. Fully online delivery service.",
     "error": "Please select a business type to continue"
   },
   "buttons": {
@@ -57,7 +59,7 @@
     "menuTranslation": "Menu Translation",
     "menuNone": "No translation",
     "menuDutch": "Dutch",
-    "menuChinese": "Chinese+Dutch",
+    "menuChinese": "Chinese + Dutch",
     "free": "Free"
   },
   "duration": {

@@ -2,7 +2,7 @@
 
 import { PRICES } from './prices.model'
 
-export type BusinessType = 'WOK' | 'RESTAURANT' | 'TAKEAWAY' | 'DELIVERY';
+export type BusinessType = 'TAKEAWAY'| 'CAFETARIA' | 'RESTAURANT' | 'WOK' | 'DELIVERY';
 export type PcType = 'STANDARD_4_3' | 'STANDARD_WIDESCREEN' | 'PROFESSIONAL_CELERON' | 'PROFESSIONAL_I5' | 'BYO';
 
 export interface PcOption {

@@ -5,14 +5,16 @@
   "business": {
     "title": "Wat voor type bedrijf heb je?",
     "subtitle": "Selecteer je bedrijfstype voor persoonlijke aanbevelingen",
-    "wok": "WOK",
-    "wokDesc": "Fast casual, hoge tafelomzet",
-    "restaurant": "Restaurant",
-    "restaurantDesc": "Full service, meerdere gangen",
+    "cafetaria": "Cafetaria",
+    "cafetariaDesc": "Een snackbar waar friet, snacks en drankjes worden geserveerd, vaak met een focus op afhaal en snelle service.",
     "takeaway": "Afhaal",
-    "takeawayDesc": "Alleen ophalen, kan gecombineerd worden met restaurant of wok",
+    "takeawayDesc": "Alleen afhaal, geen zitplaatsen. Vaak een combinatiemenu met 3 keuzes uit 20 producten. Bestel aan de balie of online, geniet thuis of onderweg.",
+    "wok": "WOK",
+    "wokDesc": "Fast casual, hoge tafelomzet. Klanten kiezen eigen ingrediënten en saus. Snelle bereiding aan de wok.",
+    "restaurant": "Restaurant",
+    "restaurantDesc": "Full service, meerdere gangen. Bediening aan tafel, reserveringen mogelijk. Geschikt voor lunch en diner.",
     "delivery": "Bezorging",
-    "deliveryDesc": "Met postcodes, adres, met of zonder klant-gegevens",
+    "deliveryDesc": "Bezorging met postcodes, adresregistratie en klantgegevens. Geen fysieke winkel, volledig thuisbezorgd.",
     "error": "Selecteer een bedrijfstype om verder te gaan"
   },
   "buttons": {

@@ -1,4 +1,30 @@
 <div class="cards-grid">
+  <!-- Takeaway (bag) -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'TAKEAWAY'"
+    (click)="selectBusinessType('TAKEAWAY')"
+  >
+    <div class="icon">
+      <img src="/icons/bag.svg" alt="Takeaway" class="business-icon">
+    </div>
+    <h3>{{ 'business.takeaway' | translate }}</h3>
+    <p>{{ 'business.takeawayDesc' | translate }}</p>
+  </div>
+
+  <!-- Cafetaria (fries) -->
+  <div 
+    class="card"
+    [class.selected]="selectedType === 'CAFETARIA'"
+    (click)="selectBusinessType('CAFETARIA')"
+  >
+    <div class="icon">
+      <img src="/icons/icon_inside.svg" alt="Cafetaria" class="business-icon">
+    </div>
+    <h3>{{ 'business.cafetaria' | translate }}</h3>
+    <p>{{ 'business.cafetariaDesc' | translate }}</p>
+  </div>
+
   <!-- WOK -->
   <div 
     class="card"
@@ -23,19 +49,6 @@
     </div>
     <h3>{{ 'business.restaurant' | translate }}</h3>
     <p>{{ 'business.restaurantDesc' | translate }}</p>
-  </div>
-
-  <!-- Takeaway (bag) -->
-  <div 
-    class="card"
-    [class.selected]="selectedType === 'TAKEAWAY'"
-    (click)="selectBusinessType('TAKEAWAY')"
-  >
-    <div class="icon">
-      <img src="/icons/bag.svg" alt="Takeaway" class="business-icon">
-    </div>
-    <h3>{{ 'business.takeaway' | translate }}</h3>
-    <p>{{ 'business.takeawayDesc' | translate }}</p>
   </div>
 
   <!-- Delivery -->

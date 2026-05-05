@@ -8,7 +8,7 @@ import { ResultsComponent } from './components/results/results.component';
 import { BusinessType, PcType, ExtrasConfig } from './models/calculator.model';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { PRICES } from './models/prices.model';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -134,9 +134,10 @@ export class AppComponent {
 
   getBusinessTypeName(): string {
     const types: {[key: string]: string} = {
-      'WOK': 'WOK',
-      'RESTAURANT': 'Restaurant',
       'TAKEAWAY': 'Takeaway',
+      'CAFETARIA': 'Cafetaria',
+      'RESTAURANT': 'Restaurant',
+      'WOK': 'WOK',
       'DELIVERY': 'Delivery'
     };
     return this.selectedBusinessType ? types[this.selectedBusinessType] : 'Not selected';
@@ -160,4 +161,11 @@ export class AppComponent {
         return 'Configured';
     }
   }
+
+  // Add constructor to set default language
+  constructor(private translate: TranslateService) {
+    translate.setDefaultLang('en');  // Set English as default
+    translate.use('en');
+  }
+
 }
