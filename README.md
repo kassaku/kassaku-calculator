@@ -1,6 +1,22 @@
 # kassaku-calculator
 An interactive **Angular** calculator that helps customers configure their POS system, compares renting vs buying, generates a break-even analysis, and captures leads via email. Generation of PDF and e-mails in next release.
 
+## What I learned until now from this app:
+* https://dashboard.emailjs.com - automatic E-mails return
+* Work with multiple languages.
+* Add my own icons (svg, jpg).
+* Create tabs.
+* Calculations in Angular.
+* Resize buttons, window.
+* Export Angular project. ng build --configuration production --optimization=true
+* Add website with ftp.
+* Embed Angular inside Wordpress website (www.kassaku.nl)
+* Work with types.
+* Call functions from html code.
+* Work with assets.
+* Let AI create 90% of the code.
+* More CSS styling.
+  
 # Functional Requirements
 
 ## FR1: Business Type Selection (First Question)
