@@ -5,7 +5,10 @@ An interactive **Angular** calculator that helps customers configure their POS s
 * https://dashboard.emailjs.com - automatic E-mails return
 * Work with multiple languages.
 * Add my own icons (svg, jpg).
-* Create tabs.
+* Multi step wizard.
+* Events between components.
+* Chart integration.
+* Real time graphs.
 * Calculations in Angular.
 * Resize buttons, window.
 * Export Angular project. ng build --configuration production --optimization=true
